@@ -1,0 +1,530 @@
+{% extends "base.html" %}
+
+{% block title %}Giriş Yap - EHM AKADEMİ{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="auth-hero-section position-relative overflow-hidden">
+    <div class="auth-hero-background">
+        <div class="auth-hero-overlay"></div>
+        <div class="auth-hero-content">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <div class="auth-hero-text fade-in-up">
+                            <h1 class="auth-hero-title mb-4">
+                                <i class="fas fa-sign-in-alt me-3 text-primary-gold"></i>
+                                Hesabınıza Giriş Yapın
+                            </h1>
+                            <p class="auth-hero-subtitle mb-4">
+                                EHM AKADEMİ platformuna giriş yaparak premium özelliklerden yararlanın
+                            </p>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb justify-content-center">
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ url_for('index') }}" class="text-primary-gold">Ana Sayfa</a>
+                                    </li>
+                                    <li class="breadcrumb-item active text-muted" aria-current="page">Giriş Yap</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Login Form Section -->
+<section class="login-form-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <!-- Main Login Form -->
+                <div class="auth-form-container glass fade-in-up">
+                    <div class="auth-form-header text-center mb-4">
+                        <div class="auth-form-icon mb-3">
+                            <i class="fas fa-user-circle fa-3x text-primary-gold"></i>
+                        </div>
+                        <h2 class="auth-form-title">Hesabınıza Giriş Yapın</h2>
+                        <p class="auth-form-subtitle text-muted">
+                            Kullanıcı adı ve şifrenizi girerek platforma erişim sağlayın
+                        </p>
+                    </div>
+                    
+                    <form method="POST" class="auth-form">
+                        <div class="form-group mb-4">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user me-2 text-primary-gold"></i>Kullanıcı Adı
+                            </label>
+                            <input type="text" class="form-control auth-input" id="username" name="username" 
+                                   placeholder="Kullanıcı adınızı girin" required>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2 text-primary-gold"></i>Şifre
+                            </label>
+                            <input type="password" class="form-control auth-input" id="password" name="password" 
+                                   placeholder="Şifrenizi girin" required>
+                        </div>
+                        
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg auth-submit-btn">
+                                <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                            </button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="text-muted mb-0">
+                                Hesabınız yok mu? 
+                                <a href="{{ url_for('register') }}" class="text-primary-gold text-decoration-none fw-bold">
+                                    Üye olun
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Admin Login -->
+                <div class="auth-form-container glass mt-4 fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="auth-form-header text-center">
+                        <div class="auth-form-icon mb-3">
+                            <i class="fas fa-cog fa-2x text-primary-gold"></i>
+                        </div>
+                        <h4 class="auth-form-title">Admin Girişi</h4>
+                        <p class="auth-form-subtitle text-muted mb-3">
+                            Platform yönetimi için admin girişi yapın
+                        </p>
+                        <a href="{{ url_for('admin_login') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-cog me-2"></i>Admin Paneli
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Support Package -->
+                <div class="auth-form-container glass mt-4 fade-in-up" style="animation-delay: 0.15s;">
+                    <div class="auth-form-header text-center mb-4">
+                        <div class="auth-form-icon mb-3">
+                            <i class="fas fa-heart fa-2x text-primary-gold"></i>
+                        </div>
+                        <h4 class="auth-form-title">Bize Destek Olun</h4>
+                        <p class="auth-form-subtitle text-muted mb-3">
+                            Platformumuzu geliştirmemize yardımcı olun ve özel avantajlardan yararlanın
+                        </p>
+                    </div>
+                    
+                    <div class="support-package-info">
+                        <div class="package-price text-center mb-3">
+                            <span class="price-amount text-primary-gold fw-bold">₺49</span>
+                            <span class="price-period text-muted">/ay</span>
+                        </div>
+                        
+                        <div class="package-features mb-4">
+                            <div class="feature-item d-flex align-items-center mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <span class="small">Öncelikli İçerik Erişimi</span>
+                            </div>
+                            <div class="feature-item d-flex align-items-center mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <span class="small">Özel Proje Koleksiyonu</span>
+                            </div>
+                            <div class="feature-item d-flex align-items-center mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <span class="small">Hızlı Destek Hizmeti</span>
+                            </div>
+                            <div class="feature-item d-flex align-items-center mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <span class="small">Platform Geliştirme Desteği</span>
+                            </div>
+                            <div class="feature-item d-flex align-items-center mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <span class="small">Teşekkür Rozeti</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="{{ url_for('register') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-heart me-2"></i>Destek Paketi Al
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Features -->
+                <div class="auth-form-container glass mt-4 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="auth-form-header text-center mb-4">
+                        <h4 class="auth-form-title">
+                            <i class="fas fa-star me-2 text-primary-gold"></i>
+                            Premium Özellikler
+                        </h4>
+                        <p class="auth-form-subtitle text-muted">
+                            Giriş yaparak erişebileceğiniz özellikler
+                        </p>
+                    </div>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-check-circle text-success"></i>
+                            </div>
+                            <span class="feature-text">Kişiselleştirilmiş içerik</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-check-circle text-success"></i>
+                            </div>
+                            <span class="feature-text">Favori dersler</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-check-circle text-success"></i>
+                            </div>
+                            <span class="feature-text">İlerleme takibi</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-check-circle text-success"></i>
+                            </div>
+                            <span class="feature-text">Mentorluk randevuları</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-check-circle text-success"></i>
+                            </div>
+                            <span class="feature-text">Bildirimler</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-check-circle text-success"></i>
+                            </div>
+                            <span class="feature-text">Topluluk forumu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Auth Hero Section */
+.auth-hero-section {
+    position: relative;
+    min-height: 60vh;
+    background: url('{{ url_for("static", filename="images/audiomixers.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    overflow: hidden;
+}
+
+.auth-hero-background {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.auth-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.auth-hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 4rem 0;
+}
+
+.auth-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.auth-hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Breadcrumb Styling */
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: var(--text-muted);
+}
+
+.breadcrumb-item.active {
+    color: var(--text-muted);
+}
+
+/* Auth Form Container */
+.auth-form-container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 40px var(--shadow-dark);
+    transition: all 0.3s ease;
+}
+
+.auth-form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px var(--shadow-dark);
+    border-color: var(--primary-gold);
+}
+
+.auth-form-header {
+    margin-bottom: 2rem;
+}
+
+.auth-form-icon {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 2px solid var(--primary-gold);
+}
+
+.auth-form-title {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auth-form-subtitle {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Form Styling */
+.auth-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form .form-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.auth-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.auth-input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 3px var(--shadow-gold);
+    color: var(--text-primary);
+}
+
+.auth-input::placeholder {
+    color: var(--text-muted);
+}
+
+.auth-submit-btn {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    color: var(--dark-bg);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.auth-submit-btn:hover::before {
+    left: 100%;
+}
+
+.auth-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px var(--shadow-gold);
+}
+
+/* Support Package */
+.support-package-info {
+    padding: 1rem;
+}
+
+.package-price {
+    margin-bottom: 1.5rem;
+}
+
+.price-amount {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.price-period {
+    font-size: 1rem;
+    margin-left: 0.5rem;
+}
+
+.package-features .feature-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.package-features .feature-item:last-child {
+    border-bottom: none;
+}
+
+.package-features .feature-item i {
+    color: var(--success-green);
+    font-size: 0.9rem;
+}
+
+.package-features .feature-item span {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+}
+
+.feature-icon {
+    margin-right: 0.75rem;
+    color: var(--success-green);
+    font-size: 1.1rem;
+}
+
+.feature-text {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Login Form Section Arka Plan */
+.login-form-section {
+    background: url('{{ url_for("static", filename="images/soundcards.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    margin: 0 -2rem;
+    width: calc(100% + 4rem);
+    position: relative;
+}
+
+.login-form-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.login-form-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .auth-form-container {
+        padding: 2rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .auth-form-container {
+        margin: 1rem;
+    }
+}
+
+/* Glassmorphism */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animations */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+{% endblock %} 

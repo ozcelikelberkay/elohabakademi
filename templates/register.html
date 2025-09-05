@@ -1,0 +1,445 @@
+{% extends "base.html" %}
+
+{% block title %}Üye Ol - ELOHAB AKADEMİ{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="auth-hero-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="auth-hero-content">
+                                    <h1 class="auth-hero-title mb-4">
+                    <span class="text-gradient">Ücretsiz Erişim</span>
+                </h1>
+                <p class="auth-hero-subtitle mb-5">
+                    ELOHAB AKADEMİ'de tüm içerikler ücretsiz! Ödeme yok, sadece hesap oluşturarak tüm kaynaklara erişim sağlayın.
+                </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Support Packages Section -->
+<section class="support-packages-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title mb-3">
+                Bize <span class="text-gradient">Destek Olun</span>
+            </h2>
+            <p class="section-subtitle text-muted">
+                Platformumuzu geliştirmemize yardımcı olun (isteğe bağlı)
+            </p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-4">
+                <div class="support-package-card">
+                    <div class="package-header text-center mb-4">
+                        <div class="package-icon">
+                            <i class="fas fa-heart fa-2x text-primary-gold"></i>
+                        </div>
+                        <h3 class="package-title">Destek Paketi</h3>
+                        <div class="package-price">
+                            <span class="price-amount">₺49</span>
+                            <span class="price-period">/ay (isteğe bağlı)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="package-features mb-4">
+                        <div class="feature-item">
+                            <i class="fas fa-check text-success me-2"></i>
+                            <span>Platform Geliştirme Desteği</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check text-success me-2"></i>
+                            <span>Teşekkür Rozeti</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check text-success me-2"></i>
+                            <span>Özel İçerik Önerileri</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check text-success me-2"></i>
+                            <span>Platform Geliştirme Desteği</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check text-success me-2"></i>
+                            <span>Teşekkür Rozeti</span>
+                        </div>
+                    </div>
+                    
+                    <div class="package-description mb-4">
+                        <p class="text-muted small text-center">
+                            Bu paket ile platformumuzun gelişimine katkıda bulunun (isteğe bağlı).
+                        </p>
+                    </div>
+                    
+                    <button class="btn btn-primary w-100" onclick="alert('Destek paketi özelliği yakında eklenecek!')">
+                        <i class="fas fa-heart me-2"></i>Destek Ol
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <div class="free-access-info">
+                                    <h4 class="text-primary-gold mb-3">
+                        <i class="fas fa-gift me-2"></i>Ücretsiz Erişim
+                    </h4>
+                    <p class="text-muted mb-4">
+                        Tüm ders notları, projeler ve kaynaklar tamamen ücretsiz! Ödeme yok, sadece hesap oluşturmanız yeterli.
+                    </p>
+                <div class="free-features">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="free-feature-item">
+                                <i class="fas fa-book text-primary-gold fa-2x mb-2"></i>
+                                <h6>Ders Notları</h6>
+                                <small class="text-muted">Sınırsız erişim</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="free-feature-item">
+                                <i class="fas fa-project-diagram text-primary-gold fa-2x mb-2"></i>
+                                <h6>Projeler</h6>
+                                <small class="text-muted">Tüm proje örnekleri</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="free-feature-item">
+                                <i class="fas fa-question-circle text-primary-gold fa-2x mb-2"></i>
+                                <h6>Çıkmış Sorular</h6>
+                                <small class="text-muted">Kapsamlı soru bankası</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="free-feature-item">
+                                <i class="fas fa-users text-primary-gold fa-2x mb-2"></i>
+                                <h6>Mentorluk</h6>
+                                <small class="text-muted">Topluluk desteği</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Registration Form Section -->
+<section class="registration-form-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="registration-form">
+                    <div class="text-center mb-4">
+                        <h3 class="text-primary-gold mb-2">
+                            <i class="fas fa-user-plus me-2"></i>Hesap Oluştur
+                        </h3>
+                        <p class="text-muted">Ücretsiz hesap oluşturarak hemen başlayın - ödeme yok!</p>
+                    </div>
+                    
+                    <form method="POST" class="auth-form-container glass">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Kullanıcı Adı</label>
+                            <input type="text" name="username" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label class="form-label">E-posta</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label class="form-label">Şifre</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label class="form-label">Şifre Tekrar</label>
+                            <input type="password" name="confirm_password" class="form-control" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Ücretsiz Hesap Oluştur
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-muted mb-0">
+                            Zaten hesabınız var mı? 
+                            <a href="{{ url_for('login') }}" class="text-primary-gold">Giriş yapın</a>
+                        </p>
+                        <p class="text-muted small mt-2">
+                            <i class="fas fa-info-circle me-1"></i>Tüm içerikler ücretsiz, ödeme gerekmez
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.auth-hero-section {
+    background: url('{{ url_for("static", filename="images/gigabyte.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    padding: 4rem 0;
+    position: relative;
+}
+
+.auth-hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.auth-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Support Packages Section Arka Plan */
+.support-packages-section {
+    background: url('{{ url_for("static", filename="images/gigabyte.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    margin: 0 -2rem;
+    width: calc(100% + 4rem);
+    position: relative;
+}
+
+.support-packages-section .container {
+    position: relative;
+}
+
+/* Registration Form Section Arka Plan */
+.registration-form-section {
+    background: url('{{ url_for("static", filename="images/computermotherboard.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    margin: 0 -2rem;
+    width: calc(100% + 4rem);
+    position: relative;
+}
+
+.registration-form-section .container {
+    position: relative;
+}
+
+.auth-hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.auth-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.auth-hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.support-package-card {
+    background: rgba(26, 26, 26, 0.8);
+    border: 2px solid var(--primary-gold);
+    border-radius: 20px;
+    padding: 2.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: none;
+}
+
+.support-package-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold), var(--bitcoin-orange));
+}
+
+.support-package-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-gold);
+}
+
+.package-header {
+    margin-bottom: 2rem;
+}
+
+.package-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    border: 2px solid var(--primary-gold);
+}
+
+.package-title {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.package-price {
+    margin-bottom: 1rem;
+}
+
+.price-amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-gold);
+}
+
+.price-period {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+}
+
+.package-features {
+    text-align: left;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.package-description {
+    padding: 1rem;
+    background: rgba(255, 215, 0, 0.05);
+    border-radius: 12px;
+    border-left: 3px solid var(--primary-gold);
+}
+
+.free-access-info {
+    background: rgba(26, 26, 26, 0.8);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    backdrop-filter: none;
+}
+
+.free-feature-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(26, 26, 26, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    backdrop-filter: none;
+}
+
+.free-feature-item:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 215, 0, 0.1);
+    border-color: var(--primary-gold);
+}
+
+.free-feature-item h6 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.registration-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.auth-form-container {
+    background: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: none;
+}
+
+.form-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--text-primary);
+    padding: 0.875rem 1.25rem;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .auth-hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .support-package-card {
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .free-features .col-md-3 {
+        margin-bottom: 1rem;
+    }
+}
+</style>
+
+<script>
+function selectSupportPackage() {
+    // Destek paketi özelliği yakında eklenecek
+    alert('Destek paketi özelliği yakında eklenecek! Şimdilik sadece ücretsiz hesap oluşturabilirsiniz.');
+}
+</script>
+{% endblock %} 

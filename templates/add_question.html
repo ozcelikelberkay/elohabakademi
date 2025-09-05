@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Yeni Soru Ekle{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="fas fa-plus me-2"></i>Yeni Soru Ekle</h5>
+        </div>
+        <div class="card-body">
+          <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label class="form-label">Ders</label>
+              <select name="course_id" class="form-select" required>
+                {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.name }} ({{ course.grade }}. Sınıf)</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Yıl</label>
+              <input type="number" name="year" class="form-control" min="1990" max="2100" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Açıklama</label>
+              <textarea name="description" class="form-control" rows="4" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Sınav Belgesi (PDF/PNG)</label>
+              <input type="file" name="file" class="form-control" accept=".pdf,.png" />
+              <div class="form-text">İsteğe bağlıdır. En fazla 100MB.</div>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Kaydet</button>
+              <a href="{{ url_for('questions') }}" class="btn btn-outline-secondary">İptal</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,1123 @@
+{% extends "base.html" %}
+
+{% block title %}Ders Forumu - ELOHAB AKADEMİ{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9 col-xxl-8">
+            <!-- Header Section -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-gradient mb-3">
+                    <i class="fas fa-comments text-warning me-3"></i>
+                    DERS FORUMU
+                </h1>
+                <p class="lead text-muted">
+                    Dersler hakkında deneyimlerinizi paylaşın, sorular sorun ve önerilerde bulunun
+                </p>
+                <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                    <button class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+                        <i class="fas fa-plus me-2"></i>Yeni Yorum Ekle
+                    </button>
+                    <button class="btn btn-outline-warning btn-lg">
+                        <i class="fas fa-filter me-2"></i>Filtrele
+                    </button>
+                </div>
+            </div>
+
+            <!-- Course Categories -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="card bg-dark border-warning">
+                        <div class="card-header bg-warning text-dark">
+                            <i class="fas fa-tags me-2"></i>
+                            Konu Başlıkları
+                        </div>
+                        <div class="card-body bg-dark">
+                            <div class="d-flex flex-wrap gap-3" id="courseCategories">
+                                <button class="btn btn-warning active" data-category="all">
+                                    <i class="fas fa-th me-2"></i>Tüm Konular
+                                </button>
+                                <button class="btn btn-outline-warning" data-category="zorunlu">
+                                    <i class="fas fa-book me-2"></i>Zorunlu Dersler
+                                </button>
+                                <button class="btn btn-outline-warning" data-category="secmeli">
+                                    <i class="fas fa-star me-2"></i>Seçmeli Dersler
+                                </button>
+                                <button class="btn btn-outline-warning" data-category="proje">
+                                    <i class="fas fa-project-diagram me-2"></i>Proje Dersleri
+                                </button>
+                                <button class="btn btn-outline-warning" data-category="diger">
+                                    <i class="fas fa-ellipsis-h me-2"></i>Diğer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Course Reviews -->
+            <div class="row g-4 mb-5" id="courseReviewsContainer">
+                <div class="col-12">
+                    <h3 class="text-warning mb-4">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        Ders Yorumları
+                    </h3>
+                </div>
+                
+                {% if reviews %}
+                    {% for review in reviews %}
+                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 course-review-item" data-category="{{ review.course_type.lower() }}">
+                        <div class="card bg-dark border-warning h-100 course-review-card" data-review-id="{{ review.id }}">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title text-warning mb-0">{{ review.course_name }}</h5>
+                                    <span class="badge bg-outline-warning flex-shrink-0">{{ review.course_type }}</span>
+                                </div>
+                                
+                                <div class="rating mb-3">
+                                    {% for i in range(1, 6) %}
+                                        {% if i <= review.rating %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="text-muted ms-2">({{ review.rating }}/5)</span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <span class="badge bg-outline-warning me-2">{{ review.grade }}. Sınıf</span>
+                                    <span class="badge bg-outline-info">{{ review.difficulty_level }}</span>
+                                </div>
+                                
+                                <p class="card-text text-white-50 flex-grow-1 mb-3">{{ review.review_text[:150] }}{% if review.review_text|length > 150 %}...{% endif %}</p>
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <small class="text-muted">
+                                        <i class="fas fa-user me-1"></i>
+                                        {{ review.author_name }}
+                                    </small>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-warning like-btn" data-review-id="{{ review.id }}" data-liked="false">
+                                            <i class="far fa-thumbs-up me-1"></i>
+                                            <span class="like-count">{{ review.likes }}</span>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info comment-btn" data-bs-toggle="modal" data-bs-target="#commentModal{{ review.id }}">
+                                            <i class="fas fa-comment me-1"></i>
+                                            <span class="comment-count">{{ review.comments_count }}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <small class="text-muted d-block mt-2">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ review.created_at.strftime('%d.%m.%Y') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Comment Modal for each review -->
+                    <div class="modal fade" id="commentModal{{ review.id }}" tabindex="-1" aria-labelledby="commentModalLabel{{ review.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-xl">
+                            <div class="modal-content bg-dark border-warning">
+                                <div class="modal-header bg-warning text-dark">
+                                    <h5 class="modal-title" id="commentModalLabel{{ review.id }}">
+                                        <i class="fas fa-comments me-2"></i>{{ review.course_name }} - Yorumlar
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Comment Form -->
+                                    <div class="mb-4">
+                                        <form class="comment-form" data-review-id="{{ review.id }}">
+                                            <div class="mb-3">
+                                                <label for="commentText{{ review.id }}" class="form-label text-warning">Yorumunuz</label>
+                                                <textarea class="form-control bg-dark border-warning text-white" id="commentText{{ review.id }}" rows="3" placeholder="Yorumunuzu yazın..." required></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="commentAuthor{{ review.id }}" class="form-label text-warning">Adınız (Opsiyonel)</label>
+                                                <input type="text" class="form-control bg-dark border-warning text-white" id="commentAuthor{{ review.id }}" placeholder="Adınızı girin (boş bırakırsanız Anonim olarak görünür)">
+                                            </div>
+                                            <button type="submit" class="btn btn-warning">
+                                                <i class="fas fa-paper-plane me-2"></i>Yorum Gönder
+                                            </button>
+                                        </form>
+                                    </div>
+                                    
+                                    <!-- Comments List -->
+                                    <div class="comments-list" id="commentsList{{ review.id }}">
+                                        <h6 class="text-warning mb-3">Mevcut Yorumlar</h6>
+                                        <div class="no-comments text-muted text-center py-3">
+                                            <i class="fas fa-comments fs-1 mb-2"></i>
+                                            <p>Henüz yorum bulunmuyor. İlk yorumu siz yapın!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12 text-center">
+                        <div class="py-5">
+                            <i class="fas fa-comments text-muted fs-1 mb-3"></i>
+                            <h4 class="text-muted">Henüz yorum bulunmuyor</h4>
+                            <p class="text-muted">İlk yorumu siz ekleyin!</p>
+                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+                                <i class="fas fa-plus me-2"></i>Yorum Ekle
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Add Review Modal -->
+            <div class="modal fade" id="addReviewModal" tabindex="-1" aria-labelledby="addReviewModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-xl">
+                    <div class="modal-content bg-dark border-warning">
+                        <div class="modal-header bg-warning text-dark">
+                            <h5 class="modal-title" id="addReviewModalLabel">
+                                <i class="fas fa-plus me-2"></i>Yeni Ders Yorumu Ekle
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!-- Modal Form -->
+                        <form method="POST" action="{{ url_for('add_course_review') }}">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="courseName" class="form-label text-warning">Ders Adı *</label>
+                                        <input type="text" class="form-control bg-dark border-warning text-white" id="courseName" name="course_name" placeholder="Ders adını girin" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="courseType" class="form-label text-warning">Ders Türü *</label>
+                                        <select class="form-select bg-dark border-warning text-white" id="courseType" name="course_type" required>
+                                            <option value="">Seçiniz</option>
+                                            <option value="Zorunlu">Zorunlu Ders</option>
+                                            <option value="Seçmeli">Seçmeli Ders</option>
+                                            <option value="Proje">Proje Dersi</option>
+                                            <option value="Diğer">Diğer</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="grade" class="form-label text-warning">Sınıf *</label>
+                                        <select class="form-select bg-dark border-warning text-white" id="grade" name="grade" required>
+                                            <option value="">Seçiniz</option>
+                                            <option value="1">1. Sınıf</option>
+                                            <option value="2">2. Sınıf</option>
+                                            <option value="3">3. Sınıf</option>
+                                            <option value="4">4. Sınıf</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="difficultyLevel" class="form-label text-warning">Zorluk Seviyesi *</label>
+                                        <select class="form-select bg-dark border-warning text-white" id="difficultyLevel" name="difficulty_level" required>
+                                            <option value="">Seçiniz</option>
+                                            <option value="Kolay">Kolay</option>
+                                            <option value="Orta">Orta</option>
+                                            <option value="Zor">Zor</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rating" class="form-label text-warning">Puan *</label>
+                                    <div class="rating-input d-flex justify-content-center">
+                                        <i class="far fa-star text-warning fs-3 me-2" data-rating="1"></i>
+                                        <i class="far fa-star text-warning fs-3 me-2" data-rating="2"></i>
+                                        <i class="far fa-star text-warning fs-3 me-2" data-rating="3"></i>
+                                        <i class="far fa-star text-warning fs-3 me-2" data-rating="4"></i>
+                                        <i class="far fa-star text-warning fs-3 me-2" data-rating="5"></i>
+                                    </div>
+                                    <input type="hidden" id="ratingValue" name="rating" value="0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="reviewText" class="form-label text-warning">Yorumunuz *</label>
+                                    <textarea class="form-control bg-dark border-warning text-white" id="reviewText" name="review_text" rows="4" placeholder="Ders hakkında deneyimlerinizi paylaşın..." required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="authorName" class="form-label text-warning">Adınız (Opsiyonel)</label>
+                                    <input type="text" class="form-control bg-dark border-warning text-white" id="authorName" name="author_name" placeholder="Adınızı girin (boş bırakırsanız Anonim olarak görünür)">
+                                </div>
+                            </div>
+                            <div class="modal-footer border-warning">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-paper-plane me-2"></i>Yorumu Gönder
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        <style>
+        /* CSS Variables for consistent color scheme */
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #B8860B;
+            --accent-gold: #FFA500;
+            --bitcoin-orange: #F7931A;
+            --dark-bg: #0A0A0A;
+            --card-bg: #1A1A1A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #E0E0E0;
+            --text-muted: #A0A0A0;
+            --success-green: #00D4AA;
+            --error-red: #FF6B6B;
+            --border-color: #333333;
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+            --shadow-gold: rgba(255, 215, 0, 0.2);
+        }
+
+        .text-gradient {
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .course-review-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, var(--card-bg), #222222) !important;
+            border: 2px solid var(--primary-gold) !important;
+            box-shadow: 0 4px 15px var(--shadow-gold);
+            min-height: 280px;
+        }
+        
+        .course-review-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold) !important;
+            box-shadow: 0 8px 25px var(--shadow-gold);
+            background: linear-gradient(145deg, #2a2a2a, var(--card-bg)) !important;
+        }
+        
+        .rating i {
+            color: var(--primary-gold);
+            transition: color 0.3s ease;
+        }
+        
+        .rating i:hover {
+            color: var(--accent-gold);
+        }
+        
+        .comment-item {
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, var(--card-bg), #222222) !important;
+            border: 1px solid var(--primary-gold) !important;
+        }
+        
+        .comment-item:hover {
+            background: linear-gradient(145deg, #2a2a2a, var(--card-bg)) !important;
+            border-color: var(--accent-gold) !important;
+            transform: translateX(5px);
+        }
+        
+        .bg-outline-warning {
+            background-color: transparent !important;
+            border: 2px solid var(--primary-gold) !important;
+            color: var(--primary-gold) !important;
+        }
+        
+        .bg-outline-warning:hover {
+            background-color: var(--primary-gold) !important;
+            color: var(--dark-bg) !important;
+        }
+        
+        .bg-outline-warning.active {
+            background-color: var(--primary-gold) !important;
+            color: var(--dark-bg) !important;
+        }
+        
+        /* Form focus styles */
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--accent-gold) !important;
+            box-shadow: 0 0 0 0.2rem var(--shadow-gold) !important;
+            background-color: #2a2a2a !important;
+        }
+        
+        /* Modal improvements */
+        .modal-content {
+            background: linear-gradient(145deg, var(--card-bg), #222222) !important;
+            border: 2px solid var(--primary-gold) !important;
+        }
+        
+        .modal-header {
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-gold)) !important;
+            color: var(--dark-bg) !important;
+            border-bottom: 2px solid var(--primary-gold) !important;
+        }
+        
+        .modal-footer {
+            border-top: 2px solid var(--primary-gold) !important;
+        }
+        
+        /* Card improvements */
+        .card {
+            background: linear-gradient(145deg, var(--card-bg), #222222) !important;
+            border: 2px solid var(--primary-gold) !important;
+        }
+        
+        .card-header {
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-gold)) !important;
+            color: var(--dark-bg) !important;
+            border-bottom: 2px solid var(--primary-gold) !important;
+        }
+        
+        /* Button improvements */
+        .btn-warning {
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-gold)) !important;
+            border: none !important;
+            color: var(--dark-bg) !important;
+            font-weight: 600 !important;
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(45deg, var(--accent-gold), var(--primary-gold)) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--shadow-gold);
+        }
+        
+        .btn-outline-warning {
+            border: 2px solid var(--primary-gold) !important;
+            color: var(--primary-gold) !important;
+            background: transparent !important;
+        }
+        
+        .btn-outline-warning:hover {
+            background: var(--primary-gold) !important;
+            color: var(--dark-bg) !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Animation for fade in */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Overall page background improvement */
+        .container-fluid {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--card-bg) 50%, var(--dark-bg) 100%);
+            min-height: 100vh;
+        }
+        
+        /* Text color improvements */
+        .text-muted {
+            color: var(--primary-gold) !important;
+        }
+        
+        .text-white-50 {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Badge improvements */
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 15px;
+        }
+        
+        /* Outline badge styles */
+        .badge.bg-outline-warning {
+            background-color: transparent !important;
+            border: 1px solid var(--primary-gold) !important;
+            color: var(--primary-gold) !important;
+        }
+        
+        .badge.bg-outline-info {
+            background-color: transparent !important;
+            border: 1px solid var(--accent-gold) !important;
+            color: var(--accent-gold) !important;
+        }
+        
+        .badge.bg-outline-warning:hover,
+        .badge.bg-outline-info:hover {
+            background-color: var(--primary-gold) !important;
+            color: var(--dark-bg) !important;
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+        
+        /* Additional comfort improvements */
+        .bg-dark {
+            background: linear-gradient(145deg, var(--card-bg), #222222) !important;
+        }
+        
+        .card-body {
+            background: linear-gradient(145deg, var(--card-bg), #222222) !important;
+        }
+        
+        /* Rating input improvements */
+        .rating-input i {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.5rem;
+        }
+        
+        .rating-input i:hover {
+            transform: scale(1.2);
+            color: var(--accent-gold) !important;
+        }
+        
+        .rating-input i.fas {
+            color: var(--primary-gold) !important;
+        }
+        
+        /* Form improvements */
+        .form-control, .form-select {
+            background: linear-gradient(145deg, #2a2a2a, var(--card-bg)) !important;
+            border: 2px solid var(--primary-gold) !important;
+            color: var(--text-secondary) !important;
+        }
+        
+        .form-control::placeholder, .form-select::placeholder {
+            color: var(--primary-gold) !important;
+            opacity: 0.7;
+        }
+        
+        /* Header improvements */
+        .display-4 {
+            text-shadow: 2px 2px 4px var(--shadow-gold);
+        }
+        
+        .lead {
+            color: var(--primary-gold) !important;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Like button active state */
+        .like-btn.liked {
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-gold)) !important;
+            color: var(--dark-bg) !important;
+            border-color: var(--accent-gold) !important;
+        }
+        
+        .like-btn.liked i {
+            color: var(--dark-bg) !important;
+        }
+        
+        /* Comment styles */
+        .comment-item {
+            background: linear-gradient(145deg, #2a2a2a, var(--card-bg)) !important;
+            border: 1px solid var(--primary-gold) !important;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-author {
+            font-weight: bold;
+            color: var(--primary-gold) !important;
+        }
+        
+        .comment-date {
+            color: var(--text-muted) !important;
+            font-size: 0.9em;
+        }
+        
+        .comment-text {
+            color: var(--text-secondary) !important;
+            margin-top: 8px;
+        }
+        
+        /* Responsive Design Improvements for Large Screens */
+        @media (min-width: 1200px) {
+            .container-fluid {
+                padding: 3rem 0;
+            }
+            
+            .display-4 {
+                font-size: 3.5rem;
+            }
+            
+            .lead {
+                font-size: 1.4rem;
+            }
+            
+            .card-header {
+                padding: 1.5rem;
+                font-size: 1.2rem;
+            }
+            
+            .card-body {
+                padding: 2rem;
+            }
+            
+            .course-review-card {
+                min-height: 320px;
+            }
+            
+            .btn-lg {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+            
+            .modal-xl {
+                max-width: 800px;
+            }
+        }
+        
+        @media (min-width: 1400px) {
+            .container-fluid {
+                padding: 4rem 0;
+            }
+            
+            .display-4 {
+                font-size: 4rem;
+            }
+            
+            .lead {
+                font-size: 1.5rem;
+            }
+            
+            .card-header {
+                padding: 2rem;
+                font-size: 1.3rem;
+            }
+            
+            .card-body {
+                padding: 2.5rem;
+            }
+            
+            .course-review-card {
+                min-height: 350px;
+            }
+            
+            .btn-lg {
+                padding: 1.2rem 2.5rem;
+                font-size: 1.2rem;
+            }
+            
+            .modal-xl {
+                max-width: 900px;
+            }
+            
+            .container-fluid .col-lg-10 {
+                max-width: 1200px;
+            }
+        }
+        
+        @media (min-width: 1600px) {
+            .container-fluid {
+                padding: 5rem 0;
+            }
+            
+            .display-4 {
+                font-size: 4.5rem;
+            }
+            
+            .lead {
+                font-size: 1.6rem;
+            }
+            
+            .card-header {
+                padding: 2.5rem;
+                font-size: 1.4rem;
+            }
+            
+            .card-body {
+                padding: 3rem;
+            }
+            
+            .course-review-card {
+                min-height: 380px;
+            }
+            
+            .btn-lg {
+                padding: 1.5rem 3rem;
+                font-size: 1.3rem;
+            }
+            
+            .modal-xl {
+                max-width: 1000px;
+            }
+            
+            .container-fluid .col-lg-10 {
+                max-width: 1400px;
+            }
+        }
+        
+        @media (min-width: 1920px) {
+            .container-fluid {
+                padding: 6rem 0;
+            }
+            
+            .display-4 {
+                font-size: 5rem;
+            }
+            
+            .lead {
+                font-size: 1.8rem;
+            }
+            
+            .card-header {
+                padding: 3rem;
+                font-size: 1.5rem;
+            }
+            
+            .card-body {
+                padding: 3.5rem;
+            }
+            
+            .course-review-card {
+                min-height: 400px;
+            }
+            
+            .btn-lg {
+                padding: 1.8rem 3.5rem;
+                font-size: 1.4rem;
+            }
+            
+            .modal-xl {
+                max-width: 1200px;
+            }
+            
+            .container-fluid .col-lg-10 {
+                max-width: 1600px;
+            }
+        }
+        
+        /* Enhanced hover effects and animations */
+        .course-review-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .course-review-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 35px var(--shadow-gold);
+        }
+        
+        .btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Improved focus states */
+        .btn:focus,
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 0.3rem var(--shadow-gold) !important;
+        }
+        
+        /* Enhanced card shadows */
+        .card {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Improved text readability */
+        .text-gradient {
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-gold), var(--bitcoin-orange));
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Enhanced modal animations */
+        .modal.fade .modal-dialog {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modal.show .modal-dialog {
+            transform: scale(1.02);
+        }
+        
+        /* Improved form styling */
+        .form-label {
+            color: var(--primary-gold) !important;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control,
+        .form-select {
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:hover,
+        .form-select:hover {
+            border-color: var(--accent-gold) !important;
+            box-shadow: 0 2px 8px var(--shadow-gold);
+        }
+        
+        /* Enhanced button states */
+        .btn-warning:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px var(--shadow-gold);
+        }
+        
+        .btn-outline-warning:active {
+            transform: translateY(0);
+        }
+        
+        /* Improved spacing and typography */
+        .card-title {
+            color: var(--primary-gold) !important;
+            font-weight: 700;
+        }
+        
+        .card-text {
+            color: var(--text-secondary) !important;
+            line-height: 1.7;
+        }
+        
+        /* Enhanced filter buttons */
+        #courseCategories .btn {
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        #courseCategories .btn.active {
+            background: linear-gradient(45deg, var(--primary-gold), var(--accent-gold)) !important;
+            color: var(--dark-bg) !important;
+            border: none !important;
+            box-shadow: 0 4px 15px var(--shadow-gold);
+        }
+        
+        /* Improved rating display */
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .rating i {
+            font-size: 1.1rem;
+        }
+        
+        /* Enhanced comment section */
+        .comments-section {
+            background: linear-gradient(145deg, var(--card-bg), #222222);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .comment-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-gold);
+        }
+        
+        .comment-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Improved responsive grid */
+        .course-review-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .course-review-item {
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .course-review-item {
+                margin-bottom: 2.5rem;
+            }
+        }
+        </style>
+
+<script>
+        // Rating functionality
+        document.querySelectorAll('.rating-input i').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.dataset.rating;
+                document.getElementById('ratingValue').value = rating; // Update hidden input
+                
+                document.querySelectorAll('.rating-input i').forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+
+        // Course category tabs functionality
+        document.querySelectorAll('#courseCategories button').forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.dataset.category;
+                console.log('Filtering by category:', category);
+                
+                // Update active button
+                document.querySelectorAll('#courseCategories button').forEach(btn => {
+                    btn.classList.remove('btn-warning', 'active');
+                    btn.classList.add('btn-outline-warning');
+                });
+                this.classList.remove('btn-outline-warning');
+                this.classList.add('btn-warning', 'active');
+                
+                // Update filter button text to show current filter
+                const filterBtn = document.querySelector('.btn-outline-warning:not([data-bs-target="#addReviewModal"])');
+                if (filterBtn) {
+                    const filterText = this.querySelector('span') ? this.querySelector('span').textContent : this.textContent;
+                    filterBtn.innerHTML = `<i class="fas fa-filter me-2"></i>${filterText}`;
+                }
+                
+                // Filter course reviews
+                filterCourseReviews(category);
+            });
+        });
+
+        // Filter course reviews function
+        function filterCourseReviews(category) {
+            const reviewItems = document.querySelectorAll('.course-review-item');
+            console.log('Filtering reviews by category:', category);
+            console.log('Total review items found:', reviewItems.length);
+            
+            let visibleCount = 0;
+            
+            reviewItems.forEach(item => {
+                const cardCategory = item.dataset.category;
+                let shouldShow = false;
+                
+                console.log('Card category:', cardCategory);
+                
+                if (category === 'all') {
+                    shouldShow = true;
+                } else if (category === 'zorunlu' && cardCategory.includes('zorunlu')) {
+                    shouldShow = true;
+                } else if (category === 'secmeli' && cardCategory.includes('secmeli')) {
+                    shouldShow = true;
+                } else if (category === 'proje' && cardCategory.includes('proje')) {
+                    shouldShow = true;
+                } else if (category === 'diger' && cardCategory.includes('diger')) {
+                    shouldShow = true;
+                }
+                
+                console.log('Should show card:', shouldShow);
+                
+                if (shouldShow) {
+                    item.style.display = 'flex';
+                    item.style.animation = 'fadeIn 0.5s ease-in';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Update the filter button to show count
+            const filterBtn = document.querySelector('.btn-outline-warning:not([data-bs-target="#addReviewModal"])');
+            if (filterBtn) {
+                const currentFilter = document.querySelector('#courseCategories button.active');
+                const filterText = currentFilter ? currentFilter.textContent.trim() : 'Filtrele';
+                filterBtn.innerHTML = `<i class="fas fa-filter me-2"></i>${filterText} (${visibleCount})`;
+            }
+            
+            // Reflow the grid to fix layout
+            setTimeout(() => {
+                reflowGrid();
+            }, 100);
+            
+            console.log(`Filtered to show ${visibleCount} reviews`);
+        }
+
+        // Function to reflow the grid after filtering
+        function reflowGrid() {
+            const container = document.getElementById('courseReviewsContainer');
+            const items = container.querySelectorAll('.course-review-item[style*="display: flex"]');
+            
+            // Force a reflow by temporarily changing display
+            items.forEach(item => {
+                item.style.display = 'none';
+            });
+            
+            setTimeout(() => {
+                items.forEach(item => {
+                    item.style.display = 'flex';
+                });
+            }, 10);
+        }
+
+        // Filter button functionality
+        document.querySelector('.btn-outline-warning:not([data-bs-target="#addReviewModal"])').addEventListener('click', function() {
+            console.log('Filter button clicked - showing all reviews');
+            // Show all reviews when filter button is clicked
+            document.querySelectorAll('#courseCategories button').forEach(btn => {
+                btn.classList.remove('btn-warning', 'active');
+                btn.classList.add('btn-outline-warning');
+            });
+            document.querySelector('#courseCategories button[data-category="all"]').classList.remove('btn-outline-warning');
+            document.querySelector('#courseCategories button[data-category="all"]').classList.add('btn-warning', 'active');
+            
+            document.querySelectorAll('.course-review-item').forEach(item => {
+                item.style.display = 'flex';
+                item.style.animation = 'fadeIn 0.5s ease-in';
+            });
+            
+            // Update filter button text
+            const totalReviews = document.querySelectorAll('.course-review-item').length;
+            this.innerHTML = `<i class="fas fa-filter me-2"></i>Filtrele (${totalReviews})`;
+            
+            // Reflow the grid to fix layout
+            setTimeout(() => {
+                reflowGrid();
+            }, 100);
+        });
+
+        // Like button functionality
+        document.querySelectorAll('.like-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const reviewId = this.dataset.reviewId;
+                const likeCount = this.querySelector('.like-count');
+                const icon = this.querySelector('i');
+                const isLiked = this.dataset.liked === 'true';
+                
+                if (isLiked) {
+                    // Unlike
+                    this.dataset.liked = 'false';
+                    this.classList.remove('liked');
+                    this.classList.remove('btn-warning');
+                    this.classList.add('btn-outline-warning');
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                } else {
+                    // Like
+                    this.dataset.liked = 'true';
+                    this.classList.add('liked');
+                    this.classList.remove('btn-outline-warning');
+                    this.classList.add('btn-warning');
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                }
+                
+                // Here you would typically send an AJAX request to update the database
+                updateLikeInDatabase(reviewId, !isLiked);
+            });
+        });
+
+        // Comment functionality
+        document.querySelectorAll('.comment-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const reviewId = this.dataset.reviewId;
+                const commentText = this.querySelector('textarea').value;
+                const commentAuthor = this.querySelector('input').value || 'Anonim';
+                
+                if (commentText.trim() === '') {
+                    alert('Lütfen yorum metni girin!');
+                    return;
+                }
+                
+                // Add comment to the UI
+                addCommentToUI(reviewId, commentText, commentAuthor);
+                
+                // Clear form
+                this.querySelector('textarea').value = '';
+                this.querySelector('input').value = '';
+                
+                // Update comment count
+                const commentCount = document.querySelector(`[data-review-id="${reviewId}"] .comment-count`);
+                commentCount.textContent = parseInt(commentCount.textContent) + 1;
+                
+                // Here you would typically send an AJAX request to save the comment
+                saveCommentToDatabase(reviewId, commentText, commentAuthor);
+            });
+        });
+
+        // Function to add comment to UI
+        function addCommentToUI(reviewId, commentText, commentAuthor) {
+            const commentsList = document.getElementById(`commentsList${reviewId}`);
+            const noComments = commentsList.querySelector('.no-comments');
+            
+            // Remove "no comments" message if it exists
+            if (noComments) {
+                noComments.remove();
+            }
+            
+            // Create comment element
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment-item';
+            commentElement.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start">
+                    <span class="comment-author">${commentAuthor}</span>
+                    <small class="comment-date">${new Date().toLocaleDateString('tr-TR')}</small>
+                </div>
+                <div class="comment-text">${commentText}</div>
+            `;
+            
+            // Add to comments list
+            commentsList.appendChild(commentElement);
+        }
+
+        // Function to update like in database
+        function updateLikeInDatabase(reviewId, isLiked) {
+            fetch('/course_forum/update_like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    review_id: reviewId,
+                    liked: isLiked
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(`Like updated successfully: ${data.likes} likes`);
+                } else {
+                    console.error('Error updating like:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating like:', error);
+            });
+        }
+
+        // Function to save comment to database
+        function saveCommentToDatabase(reviewId, commentText, commentAuthor) {
+            fetch('/course_forum/add_comment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    review_id: reviewId,
+                    comment_text: commentText,
+                    author_name: commentAuthor
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(`Comment added successfully: ${data.comment_count} comments`);
+                } else {
+                    console.error('Error adding comment:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error adding comment:', error);
+            });
+        }
+</script>
+{% endblock %}

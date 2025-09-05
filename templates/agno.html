@@ -1,0 +1,830 @@
+{% extends "base.html" %}
+
+{% block title %}AGNO ve ÇAN Hesaplayıcı - EHM Akademi{% endblock %}
+
+{% block content %}
+<style>
+/* Fix dropdown option text color visibility */
+.form-select option {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border: none;
+}
+
+.form-select option:hover {
+    background-color: #333333 !important;
+    color: #FFD700 !important;
+}
+
+.form-select option:checked {
+    background-color: #FFD700 !important;
+    color: #1a1a1a !important;
+}
+
+/* Ensure select dropdowns have proper contrast */
+.form-select {
+    background-color: rgba(255,255,255,0.1) !important;
+    border: 2px solid var(--border-color) !important;
+    color: white !important;
+}
+
+.form-select:focus {
+    border-color: var(--primary-gold) !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25) !important;
+}
+
+/* Additional styling for course grade selects */
+.course-grade option {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    padding: 8px;
+}
+
+.course-grade option:hover {
+    background-color: #333333 !important;
+    color: #FFD700 !important;
+}
+
+.course-grade option[value=""] {
+    color: #cccccc !important;
+    font-style: italic;
+}
+
+/* Semester selection styling */
+.semester-section {
+    border-left: 3px solid var(--primary-gold);
+    padding-left: 1rem;
+    margin-left: 0.5rem;
+}
+
+.semester-section h6 {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+}
+
+/* Course row styling improvements */
+.course-row {
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.course-row:hover {
+    border-left-color: var(--primary-gold);
+    background: rgba(255,255,255,0.08) !important;
+}
+
+/* Disabled state styling */
+.form-select:disabled {
+    background-color: rgba(255,255,255,0.05) !important;
+    border-color: rgba(255,215,0,0.1) !important;
+    color: rgba(255,255,255,0.5) !important;
+    cursor: not-allowed;
+}
+
+.form-select:disabled option {
+    color: rgba(255,255,255,0.5) !important;
+}
+</style>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 text-primary-gold mb-3">
+                    <i class="fas fa-calculator me-3"></i>
+                    AGNO & ÇAN Hesaplayıcı
+                </h1>
+                <p class="lead text-muted">
+                    Elektronik ve Haberleşme Mühendisliği derslerinizden AGNO ve ÇAN notunuzu hesaplayın
+                </p>
+            </div>
+
+            <!-- Calculator Cards -->
+            <div class="row">
+                <!-- AGNO Calculator -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="card-header" style="background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%); border: none;">
+                            <h4 class="card-title mb-0" style="color: var(--dark-bg);">
+                                <i class="fas fa-graduation-cap me-2"></i>
+                                AGNO Hesaplayıcı
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <label class="form-label text-primary-gold fw-bold">Dönem Bazlı Ders Seçimi:</label>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="addCourseRow()">
+                                        <i class="fas fa-plus"></i> Dönem Ekle
+                                    </button>
+                                </div>
+                                <div id="courseRows">
+                                    <!-- Course rows will be added here -->
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-primary btn-lg" onclick="calculateAGNO()">
+                                    <i class="fas fa-calculator me-2"></i>AGNO Hesapla
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="clearAGNO()">
+                                    <i class="fas fa-trash me-2"></i>Temizle
+                                </button>
+                            </div>
+                            
+                            <!-- Result -->
+                            <div class="mt-4 p-3 rounded" style="background: rgba(255,215,0,0.1); border: 1px solid var(--primary-gold);">
+                                <div class="text-center">
+                                    <h5 class="text-primary-gold mb-2">AGNO Sonucu</h5>
+                                    <div id="agnoResult" class="h2 text-primary-gold">-</div>
+                                    <small class="text-muted">4.00 üzerinden</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ÇAN Calculator -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="card-header" style="background: linear-gradient(135deg, var(--success-green) 0%, #00B894 100%); border: none;">
+                            <h4 class="card-title mb-0 text-white">
+                                <i class="fas fa-chart-line me-2"></i>
+                                ÇAN Hesaplayıcı
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-bold">T Notunuzu Girin:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" style="background: var(--success-green); color: white; border: 1px solid var(--success-green);">
+                                        <i class="fas fa-percentage"></i>
+                                    </span>
+                                    <input type="number" id="tNotu" class="form-control" placeholder="T Notunuz (0-100)" 
+                                           min="0" max="100" style="background: rgba(255,255,255,0.1); border: 1px solid var(--border-color); color: white;">
+                                </div>
+                                <small class="text-muted">T Notu: Türkiye geneli yüzdelik dilim notunuz</small>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-success btn-lg" onclick="calculateCAN()">
+                                    <i class="fas fa-calculator me-2"></i>ÇAN Hesapla
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="clearCAN()">
+                                    <i class="fas fa-trash me-2"></i>Temizle
+                                </button>
+                            </div>
+                            
+                            <!-- Result -->
+                            <div class="mt-4 p-3 rounded" style="background: rgba(0, 212, 170, 0.1); border: 1px solid var(--success-green);">
+                                <div class="text-center">
+                                    <h5 class="text-success mb-2">ÇAN Sonucu</h5>
+                                    <div id="canResult" class="h2 text-success">-</div>
+                                    <small class="text-muted">100 üzerinden</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grade Scale Reference -->
+            <div class="row mt-4">
+                <div class="col-lg-6">
+                    <div class="card" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="card-header">
+                            <h5 class="card-title text-primary-gold mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Not Sistemi
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted d-block">AA: 4.0 (90-100)</small>
+                                    <small class="text-muted d-block">BA: 3.5 (85-89)</small>
+                                    <small class="text-muted d-block">BB: 3.0 (80-84)</small>
+                                    <small class="text-muted d-block">CB: 2.5 (75-79)</small>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">CC: 2.0 (70-74)</small>
+                                    <small class="text-muted d-block">DC: 1.5 (65-69)</small>
+                                    <small class="text-muted d-block">DD: 1.0 (60-64)</small>
+                                    <small class="text-muted d-block">FF: 0.0 (0-59)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                        <div class="card-header">
+                            <h5 class="card-title text-success mb-0">
+                                <i class="fas fa-question-circle me-2"></i>ÇAN Nedir?
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted small mb-2">
+                                <strong>ÇAN (Çift Anadal Notu):</strong> Üniversitelerde çift anadal programlarına 
+                                başvuru için kullanılan puanlama sistemidir.
+                            </p>
+                            <p class="text-muted small mb-0">
+                                T Notunuz (yüzdelik dilim notunuz) üzerinden hesaplanır ve 100 puan üzerinden değerlendirilir.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Course data - EHM courses by grade and semester
+    const courseData = {
+        1: {
+            'Güz': [
+                {name: 'Bilgisayara Giriş', code: '0207352', credits: 2},
+                {name: 'Mesleki İngilizce', code: '0207506', credits: 2},
+                {name: 'Matematik I', code: '9501005', credits: 4},
+                {name: 'Fizik I', code: '9501038', credits: 4},
+                {name: 'Türk Dili I', code: '9901012', credits: 2}
+            ],
+            'Bahar': [
+                {name: 'Mühendislik Uygulamalarına Giriş', code: '0207354', credits: 2},
+                {name: 'Matematik II', code: '9501006', credits: 4},
+                {name: 'Fizik II', code: '9501037', credits: 4},
+                {name: 'Elektrik Devre Temelleri', code: '9502023', credits: 3},
+                {name: 'Ölçme ve Devre Laboratuvarı', code: '9502024', credits: 2},
+                {name: 'Bilgisayar Programlama', code: '9502027', credits: 3},
+                {name: 'Türk Dili II', code: '9901013', credits: 2},
+                {name: 'Kariyer Planlama', code: '9912002', credits: 1}
+            ]
+        },
+        2: {
+            'Güz': [
+                {name: 'Devre ve Sistem Teorisi', code: '0207357', credits: 3},
+                {name: 'Elektronik 1', code: '0207359', credits: 3},
+                {name: 'Elektronik Laboratuvarı 1', code: '0207361', credits: 2},
+                {name: 'Diferansiyel Denklemler', code: '9501017', credits: 3},
+                {name: 'Lineer Cebir', code: '9501018', credits: 3},
+                {name: 'Olasılık ve İstatistik', code: '9501019', credits: 3}
+            ],
+            'Bahar': [
+                {name: 'Elektronik 2', code: '0207360', credits: 3},
+                {name: 'Elektronik Laboratuvarı 2', code: '0207362', credits: 2},
+                {name: 'Lojik Devreler', code: '0207363', credits: 3},
+                {name: 'İş Sağlığı ve Güvenliği - 1', code: '0207503', credits: 1}
+            ]
+        },
+        3: {
+            'Güz': [
+                {name: 'Analog Haberleşme', code: '0207370', credits: 3},
+                {name: 'Sayısal İşaret İşleme', code: '0207371', credits: 3},
+                {name: 'Analog Haberleşme Laboratuvarı', code: '0207473', credits: 2},
+                {name: 'Elektromagnetik Dalga Teorisi', code: '0207500', credits: 3},
+                {name: 'İş Sağlığı ve Güvenliği - 2', code: '0207504', credits: 1},
+                {name: 'İş Hayatına Hazırlık, İnovasyon ve Proje Yönetimi', code: '0207505', credits: 2},
+                {name: 'Mühendislik Tasarımı - 1', code: '0207515', credits: 2},
+                {name: 'Atatürk İlkeleri ve İnkilap Tarihi I', code: '9905013', credits: 2}
+            ],
+            'Bahar': [
+                {name: 'Sayısal Haberleşme', code: '0207376', credits: 3},
+                {name: 'Staj-1', code: '0207467', credits: 0},
+                {name: 'Sayısal Haberleşme Laboratuvarı', code: '0207498', credits: 2},
+                {name: 'Mühendislik Tasarımı - 2', code: '0207516', credits: 2},
+                {name: 'Kontrol Sistemlerine Giriş', code: '9502033', credits: 3},
+                {name: 'Atatürk İlkeleri ve İnkilap Tarihi II', code: '9905014', credits: 2},
+                {name: 'İşaret İşleme Uygulamaları', code: '0207407', credits: 3},
+                {name: 'Uzaktan Algılama Teknolojileri', code: '0207409', credits: 3}
+            ]
+        },
+        4: {
+            'Güz': [
+                {name: 'Mühendislik Tasarımı - 3', code: '0207517', credits: 2},
+                {name: 'İşyeri Mühendislik Eğitimi', code: '9502051', credits: 3},
+                {name: 'İşyeri Mühendislik Uygulaması', code: '9502052', credits: 3}
+            ],
+            'Bahar': [
+                {name: 'Bitirme Çalışması', code: '0207518', credits: 4},
+                {name: 'Staj-2', code: '0207468', credits: 0}
+            ]
+        },
+        'Seçmeli': {
+            'Dersler': [
+                {name: 'Mikrodalga Mühendisliği', code: '0207389', credits: 3},
+                {name: 'Geribeslemeli Sistemler', code: '0207396', credits: 3},
+                {name: 'Doğrusal Sistem Teorisine Giriş', code: '0207397', credits: 3},
+                {name: 'VLSI Tasarım', code: '0207415', credits: 3},
+                {name: 'İmge İşleme', code: '9502030', credits: 3}
+            ]
+        }
+    };
+
+    // Add initial course row
+    document.addEventListener('DOMContentLoaded', function() {
+        addCourseRow();
+    });
+
+    function addCourseRow() {
+        const courseRows = document.getElementById('courseRows');
+        const rowIndex = courseRows.children.length;
+        
+        const rowHtml = `
+            <div class="course-row mb-4 p-4 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-primary-gold fw-bold mb-2">
+                            <i class="fas fa-graduation-cap me-2"></i>Sınıf Seçin
+                        </label>
+                        <select class="form-select grade-select" onchange="updateSemesterOptions(${rowIndex})" 
+                                style="background: rgba(255,255,255,0.1); border: 2px solid var(--border-color); color: white; font-size: 1rem; padding: 0.75rem;">
+                            <option value="">📚 Sınıf Seçin</option>
+                            <option value="1">1. Sınıf</option>
+                            <option value="2">2. Sınıf</option>
+                            <option value="3">3. Sınıf</option>
+                            <option value="4">4. Sınıf</option>
+                            <option value="Seçmeli">Seçmeli Dersler</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-primary-gold fw-bold mb-2">
+                            <i class="fas fa-calendar-alt me-2"></i>Dönem Seçin
+                        </label>
+                        <select class="form-select semester-select" onchange="loadCoursesForSemester(${rowIndex})" 
+                                style="background: rgba(255,255,255,0.1); border: 2px solid var(--border-color); color: white; font-size: 1rem; padding: 0.75rem;" disabled>
+                            <option value="">🗓️ Önce Sınıf Seçin</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Courses will be loaded here -->
+                <div class="courses-container" id="coursesContainer${rowIndex}" style="display: none;">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h6 class="text-primary-gold">
+                                <i class="fas fa-list me-2"></i>Dersleriniz - Harf Notlarını Girin
+                            </h6>
+                            <hr style="border-color: var(--primary-gold); opacity: 0.3;">
+                        </div>
+                    </div>
+                    <div class="courses-list" id="coursesList${rowIndex}">
+                        <!-- Individual courses will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Remove button -->
+                ${rowIndex > 0 ? `
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-outline-danger" onclick="removeCourseRow(this)" title="Bu Dönem Kaydını Kaldır">
+                        <i class="fas fa-trash me-2"></i>Dönem Kaydını Kaldır
+                    </button>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        
+        courseRows.insertAdjacentHTML('beforeend', rowHtml);
+    }
+
+    function updateSemesterOptions(rowIndex) {
+        const gradeSelect = document.querySelectorAll('.grade-select')[rowIndex];
+        const semesterSelect = document.querySelectorAll('.semester-select')[rowIndex];
+        const coursesContainer = document.getElementById(`coursesContainer${rowIndex}`);
+        
+        const selectedGrade = gradeSelect.value;
+        
+        // Reset semester dropdown
+        semesterSelect.innerHTML = '';
+        coursesContainer.style.display = 'none';
+        
+        if (selectedGrade && courseData[selectedGrade]) {
+            semesterSelect.disabled = false;
+            semesterSelect.innerHTML = '<option value="">🗓️ Dönem Seçin</option>';
+            
+            // Add available semesters for the selected grade
+            Object.keys(courseData[selectedGrade]).forEach(semester => {
+                const option = document.createElement('option');
+                option.value = semester;
+                if (semester === 'Güz') {
+                    option.textContent = `🍂 ${semester} Dönemi`;
+                } else if (semester === 'Bahar') {
+                    option.textContent = `🌸 ${semester} Dönemi`;
+                } else {
+                    option.textContent = `📚 ${semester}`;
+                }
+                semesterSelect.appendChild(option);
+            });
+        } else {
+            semesterSelect.disabled = true;
+            semesterSelect.innerHTML = '<option value="">🗓️ Önce Sınıf Seçin</option>';
+        }
+    }
+
+    function loadCoursesForSemester(rowIndex) {
+        const gradeSelect = document.querySelectorAll('.grade-select')[rowIndex];
+        const semesterSelect = document.querySelectorAll('.semester-select')[rowIndex];
+        const coursesContainer = document.getElementById(`coursesContainer${rowIndex}`);
+        const coursesList = document.getElementById(`coursesList${rowIndex}`);
+        
+        const selectedGrade = gradeSelect.value;
+        const selectedSemester = semesterSelect.value;
+        
+        if (selectedGrade && selectedSemester && courseData[selectedGrade] && courseData[selectedGrade][selectedSemester]) {
+            let coursesHtml = '';
+            let courseIndex = 0;
+            
+            // Display semester name
+            let semesterDisplayName = selectedSemester;
+            if (selectedSemester === 'Güz') {
+                semesterDisplayName = `🍂 ${selectedSemester} Dönemi`;
+            } else if (selectedSemester === 'Bahar') {
+                semesterDisplayName = `🌸 ${selectedSemester} Dönemi`;
+            } else if (selectedSemester === 'Dersler') {
+                semesterDisplayName = `📚 ${selectedSemester}`;
+            }
+            
+            coursesHtml += `
+                <div class="semester-section mb-4">
+                    <h6 class="text-muted mb-3">
+                        <i class="fas fa-calendar-alt me-2"></i>${selectedGrade}. Sınıf - ${semesterDisplayName}
+                    </h6>
+                    <div class="row">
+            `;
+            
+            courseData[selectedGrade][selectedSemester].forEach(course => {
+                if (course.credits > 0) { // Only show courses with credits (exclude internships)
+                    coursesHtml += `
+                        <div class="col-lg-6 col-md-12 mb-3">
+                            <div class="course-item p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,215,0,0.2);">
+                                <div class="row align-items-center">
+                                    <div class="col-8">
+                                        <div class="course-info">
+                                            <strong class="text-white d-block" style="font-size: 0.9rem;">${course.name}</strong>
+                                            <small class="text-muted">${course.code} • ${course.credits} Kredi</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <select class="form-select course-grade" data-course='${JSON.stringify(course)}' data-row="${rowIndex}" data-course-index="${courseIndex}" onchange="updateCourseGrade(this)"
+                                                style="background: rgba(255,255,255,0.1); border: 1px solid var(--primary-gold); color: white; font-size: 0.85rem;">
+                                            <option value="">🎯 Not</option>
+                                            <option value="4.0">AA</option>
+                                            <option value="3.5">BA</option>
+                                            <option value="3.0">BB</option>
+                                            <option value="2.5">CB</option>
+                                            <option value="2.0">CC</option>
+                                            <option value="1.5">DC</option>
+                                            <option value="1.0">DD</option>
+                                            <option value="0.0">FF</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    courseIndex++;
+                }
+            });
+            
+            coursesHtml += `
+                    </div>
+                </div>
+            `;
+            
+            coursesList.innerHTML = coursesHtml;
+            coursesContainer.style.display = 'block';
+            
+        } else {
+            coursesList.innerHTML = '';
+            coursesContainer.style.display = 'none';
+        }
+    }
+    
+    function updateCourseGrade(selectElement) {
+        // This function is called when a user selects a grade for a course
+        // We can add visual feedback here if needed
+        if (selectElement.value) {
+            selectElement.style.borderColor = 'var(--primary-gold)';
+            selectElement.style.backgroundColor = 'rgba(255,215,0,0.1)';
+            
+            // Add a small checkmark icon to show it's completed
+            const courseItem = selectElement.closest('.course-item');
+            let checkIcon = courseItem.querySelector('.grade-check');
+            if (!checkIcon) {
+                checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check-circle grade-check text-success';
+                checkIcon.style.fontSize = '0.8rem';
+                checkIcon.style.marginLeft = '0.25rem';
+                selectElement.parentNode.appendChild(checkIcon);
+            }
+        } else {
+            selectElement.style.borderColor = 'var(--border-color)';
+            selectElement.style.backgroundColor = 'rgba(255,255,255,0.1)';
+            
+            // Remove checkmark if grade is cleared
+            const courseItem = selectElement.closest('.course-item');
+            const checkIcon = courseItem.querySelector('.grade-check');
+            if (checkIcon) {
+                checkIcon.remove();
+            }
+        }
+        
+        // Update course counter
+        updateSelectedCoursesCounter();
+    }
+    
+    function updateSelectedCoursesCounter() {
+        const allGradeSelects = document.querySelectorAll('.course-grade');
+        const selectedCourses = Array.from(allGradeSelects).filter(select => select.value !== '');
+        
+        // You can add a counter display here if needed
+        console.log(`Selected courses: ${selectedCourses.length}`);
+    }
+
+    function removeCourseRow(button) {
+        button.closest('.course-row').remove();
+    }
+
+    function calculateAGNO() {
+        const courseRows = document.querySelectorAll('.course-row');
+        let totalPoints = 0;
+        let totalCredits = 0;
+        let validCourses = 0;
+        let calculationDetails = [];
+        
+        courseRows.forEach((row, index) => {
+            const courseGradeSelects = row.querySelectorAll('.course-grade');
+            
+            courseGradeSelects.forEach(gradeSelect => {
+                if (gradeSelect.value) {
+                    const courseInfo = JSON.parse(gradeSelect.dataset.course);
+                    const gpa = parseFloat(gradeSelect.value);
+                    const credits = courseInfo.credits;
+                    const gradeText = gradeSelect.options[gradeSelect.selectedIndex].text;
+                    
+                    if (credits > 0) { // Exclude internships and 0-credit courses
+                        const coursePoints = gpa * credits;
+                        totalPoints += coursePoints;
+                        totalCredits += credits;
+                        validCourses++;
+                        
+                        // Store calculation details for display
+                        calculationDetails.push({
+                            name: courseInfo.name,
+                            code: courseInfo.code,
+                            credits: credits,
+                            grade: gradeText,
+                            gpa: gpa,
+                            points: coursePoints
+                        });
+                    }
+                }
+            });
+        });
+        
+        if (validCourses > 0 && totalCredits > 0) {
+            const agno = (totalPoints / totalCredits).toFixed(2);
+            
+            // Update main result
+            document.getElementById('agnoResult').textContent = agno;
+            
+            // Show detailed calculation breakdown
+            showAGNODetails(calculationDetails, totalPoints, totalCredits, agno);
+        } else {
+            document.getElementById('agnoResult').textContent = '-';
+            hideAGNODetails();
+            alert('Lütfen en az bir ders için not girin!');
+        }
+    }
+    
+    function showAGNODetails(details, totalPoints, totalCredits, agno) {
+        let detailsHtml = `
+            <div class="mt-3 p-3 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+                <h6 class="text-primary-gold mb-3">
+                    <i class="fas fa-list-alt me-2"></i>Hesaplama Detayları
+                </h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-dark">
+                        <thead>
+                            <tr>
+                                <th style="font-size: 0.8rem;">Ders</th>
+                                <th style="font-size: 0.8rem;">Kredi</th>
+                                <th style="font-size: 0.8rem;">Harf Notu</th>
+                                <th style="font-size: 0.8rem;">Puan</th>
+                                <th style="font-size: 0.8rem;">Toplam</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+        
+        details.forEach(detail => {
+            detailsHtml += `
+                <tr>
+                    <td style="font-size: 0.75rem;">
+                        <strong>${detail.name}</strong><br>
+                        <small class="text-muted">${detail.code}</small>
+                    </td>
+                    <td class="text-center">${detail.credits}</td>
+                    <td class="text-center">
+                        <span class="badge" style="background: var(--primary-gold); color: var(--dark-bg);">
+                            ${detail.grade}
+                        </span>
+                    </td>
+                    <td class="text-center">${detail.gpa.toFixed(1)}</td>
+                    <td class="text-center"><strong>${detail.points.toFixed(1)}</strong></td>
+                </tr>
+            `;
+        });
+        
+        detailsHtml += `
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-warning">
+                                <td><strong>TOPLAM</strong></td>
+                                <td class="text-center"><strong>${totalCredits}</strong></td>
+                                <td colspan="2" class="text-center"><strong>Toplam Puan</strong></td>
+                                <td class="text-center"><strong>${totalPoints.toFixed(1)}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="text-center p-2 rounded" style="background: rgba(255,215,0,0.1);">
+                            <small class="text-muted d-block">Toplam Kredi</small>
+                            <strong class="text-primary-gold">${totalCredits}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-2 rounded" style="background: rgba(255,215,0,0.1);">
+                            <small class="text-muted d-block">Toplam Puan</small>
+                            <strong class="text-primary-gold">${totalPoints.toFixed(1)}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-2 rounded" style="background: rgba(255,215,0,0.2);">
+                            <small class="text-muted d-block">AGNO</small>
+                            <strong class="text-primary-gold h5">${agno}</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 text-center">
+                    <small class="text-muted">
+                        <i class="fas fa-calculator me-1"></i>
+                        Hesaplama: ${totalPoints.toFixed(1)} ÷ ${totalCredits} = ${agno}
+                    </small>
+                </div>
+            </div>
+        `;
+        
+        // Insert or update details
+        let existingDetails = document.getElementById('agnoDetails');
+        if (existingDetails) {
+            existingDetails.innerHTML = detailsHtml;
+        } else {
+            const resultDiv = document.getElementById('agnoResult').closest('.mt-4');
+            resultDiv.insertAdjacentHTML('afterend', '<div id="agnoDetails">' + detailsHtml + '</div>');
+        }
+    }
+    
+    function hideAGNODetails() {
+        const existingDetails = document.getElementById('agnoDetails');
+        if (existingDetails) {
+            existingDetails.remove();
+        }
+    }
+
+    function clearAGNO() {
+        document.getElementById('courseRows').innerHTML = '';
+        document.getElementById('agnoResult').textContent = '-';
+        hideAGNODetails();
+        addCourseRow();
+    }
+
+    function calculateCAN() {
+        const tNotu = parseFloat(document.getElementById('tNotu').value);
+        
+        if (isNaN(tNotu) || tNotu < 0 || tNotu > 100) {
+            alert('Lütfen geçerli bir T Notu girin (0-100 arası)!');
+            return;
+        }
+        
+        // ÇAN calculation algorithm with detailed breakdown
+        let canScore;
+        let calculationStep;
+        
+        if (tNotu >= 95) {
+            canScore = 100;
+            calculationStep = `T Notu ≥ 95 olduğu için ÇAN = 100`;
+        } else if (tNotu >= 90) {
+            canScore = 95 + (tNotu - 90);
+            calculationStep = `ÇAN = 95 + (${tNotu} - 90) = 95 + ${(tNotu - 90).toFixed(1)} = ${canScore.toFixed(1)}`;
+        } else if (tNotu >= 85) {
+            canScore = 85 + (tNotu - 85) * 2;
+            calculationStep = `ÇAN = 85 + (${tNotu} - 85) × 2 = 85 + ${(tNotu - 85).toFixed(1)} × 2 = ${canScore.toFixed(1)}`;
+        } else if (tNotu >= 80) {
+            canScore = 75 + (tNotu - 80) * 2;
+            calculationStep = `ÇAN = 75 + (${tNotu} - 80) × 2 = 75 + ${(tNotu - 80).toFixed(1)} × 2 = ${canScore.toFixed(1)}`;
+        } else if (tNotu >= 70) {
+            canScore = 60 + (tNotu - 70) * 1.5;
+            calculationStep = `ÇAN = 60 + (${tNotu} - 70) × 1.5 = 60 + ${(tNotu - 70).toFixed(1)} × 1.5 = ${canScore.toFixed(1)}`;
+        } else if (tNotu >= 60) {
+            canScore = 45 + (tNotu - 60) * 1.5;
+            calculationStep = `ÇAN = 45 + (${tNotu} - 60) × 1.5 = 45 + ${(tNotu - 60).toFixed(1)} × 1.5 = ${canScore.toFixed(1)}`;
+        } else {
+            canScore = tNotu * 0.75;
+            calculationStep = `ÇAN = ${tNotu} × 0.75 = ${canScore.toFixed(1)}`;
+        }
+        
+        const finalScore = Math.round(canScore);
+        document.getElementById('canResult').textContent = finalScore;
+        
+        // Show detailed calculation
+        showCANDetails(tNotu, finalScore, calculationStep);
+    }
+    
+    function showCANDetails(tNotu, canScore, calculationStep) {
+        let detailsHtml = `
+            <div class="mt-3 p-3 rounded" style="background: rgba(0, 212, 170, 0.05); border: 1px solid var(--success-green);">
+                <h6 class="text-success mb-3">
+                    <i class="fas fa-calculator me-2"></i>ÇAN Hesaplama Detayları
+                </h6>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded" style="background: rgba(0, 212, 170, 0.1);">
+                            <h6 class="text-success mb-2">Girdiğiniz Değer</h6>
+                            <div class="d-flex justify-content-between">
+                                <span>T Notunuz:</span>
+                                <strong class="text-success">${tNotu}%</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded" style="background: rgba(0, 212, 170, 0.15);">
+                            <h6 class="text-success mb-2">Hesaplanan Değer</h6>
+                            <div class="d-flex justify-content-between">
+                                <span>ÇAN Notunuz:</span>
+                                <strong class="text-success h5">${canScore}/100</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert" style="background: rgba(0, 212, 170, 0.1); border: 1px solid var(--success-green); color: white;">
+                    <h6 class="text-success">
+                        <i class="fas fa-info-circle me-2"></i>Hesaplama Aşaması
+                    </h6>
+                    <p class="mb-0 font-monospace">${calculationStep}</p>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                 style="width: ${canScore}%; background: linear-gradient(135deg, var(--success-green) 0%, #00B894 100%) !important;"
+                                 aria-valuenow="${canScore}" aria-valuemin="0" aria-valuemax="100">
+                                <strong>${canScore}/100</strong>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small class="text-muted">0</small>
+                            <small class="text-muted">50</small>
+                            <small class="text-muted">100</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3 text-center">
+                    <small class="text-muted">
+                        <i class="fas fa-lightbulb me-1"></i>
+                        Yüksek ÇAN notu çift anadal program başvurularınız için avantaj sağlar
+                    </small>
+                </div>
+            </div>
+        `;
+        
+        // Insert or update details
+        let existingDetails = document.getElementById('canDetails');
+        if (existingDetails) {
+            existingDetails.innerHTML = detailsHtml;
+        } else {
+            const resultDiv = document.getElementById('canResult').closest('.mt-4');
+            resultDiv.insertAdjacentHTML('afterend', '<div id="canDetails">' + detailsHtml + '</div>');
+        }
+    }
+    
+    function hideCANDetails() {
+        const existingDetails = document.getElementById('canDetails');
+        if (existingDetails) {
+            existingDetails.remove();
+        }
+    }
+
+    function clearCAN() {
+        document.getElementById('tNotu').value = '';
+        document.getElementById('canResult').textContent = '-';
+        hideCANDetails();
+    }
+</script>
+{% endblock %}

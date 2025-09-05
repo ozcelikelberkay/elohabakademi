@@ -1,0 +1,44 @@
+[
+  {
+    "test": "Log Dosyaları Varlığı",
+    "success": true,
+    "timestamp": "2025-08-18T00:34:13.794920",
+    "details": "Tüm log dosyaları mevcut"
+  },
+  {
+    "test": "404 Hata Sayfası",
+    "success": true,
+    "timestamp": "2025-08-18T00:34:15.838031",
+    "details": "Status: 404"
+  },
+  {
+    "test": "500 Hata Sayfası",
+    "success": true,
+    "timestamp": "2025-08-18T00:34:17.877569",
+    "details": "Status: 500"
+  },
+  {
+    "test": "Güvenlik Logging",
+    "success": true,
+    "timestamp": "2025-08-18T00:34:19.916726",
+    "details": "Başarısız giriş denemesi loglandı"
+  },
+  {
+    "test": "Dosya Upload Logging",
+    "success": true,
+    "timestamp": "2025-08-18T00:34:23.974340",
+    "details": "Dosya yükleme denemesi loglandı (200 - login page)"
+  },
+  {
+    "test": "Ödeme Logging",
+    "success": true,
+    "timestamp": "2025-08-18T00:34:26.013531",
+    "details": "Ödeme sayfası erişimi loglandı"
+  },
+  {
+    "test": "Log İçerik Kontrolü",
+    "success": true,
+    "timestamp": "2025-08-18T00:34:26.014533",
+    "details": "Son log: 2025-08-18 00:34:26,011 - app - INFO - Response: 200 - IP: 127.0.0.1 - User: Anonymous (ID: Anonymou..."
+  }
+]

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Proje Ekle - Elohab Akademi{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>Yeni Proje Ekle
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Proje Başlığı *</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Proje Açıklaması *</label>
+                            <textarea class="form-control" id="description" name="description" rows="6" required 
+                                      placeholder="Projenizin detaylı açıklamasını buraya yazın..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Proje Kategorisi *</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">Kategori seçin...</option>
+                                <option value="elektronik">Elektronik Devre Projeleri</option>
+                                <option value="mikroislemci">Mikroişlemci Projeleri</option>
+                                <option value="makine_ogrenmesi">Makine Öğrenmesi & Derin Öğrenme</option>
+                                <option value="otomasyon">Otomasyon Projeleri</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="grade" class="form-label">Sınıf *</label>
+                            <select class="form-select" id="grade" name="grade" required>
+                                <option value="">Sınıf seçin...</option>
+                                <option value="1">1. Sınıf</option>
+                                <option value="2">2. Sınıf</option>
+                                <option value="3">3. Sınıf</option>
+                                <option value="4">4. Sınıf</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Proje Dosyası (Opsiyonel)</label>
+                            <input type="file" class="form-control" id="file" name="file" 
+                                   accept=".zip,.rar,.pdf,.docx,.txt,.py,.cpp,.h,.ino">
+                            <div class="form-text">
+                                <strong>Desteklenen formatlar:</strong> ZIP, RAR, PDF, DOCX, TXT, PY, CPP, H, INO<br>
+                                <strong>Maksimum boyut:</strong> 100MB<br>
+                                <strong>Arşiv dosyaları:</strong> ZIP ve RAR dosyaları otomatik olarak analiz edilir
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('projects') }}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-arrow-left me-1"></i>Geri Dön
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Projeyi Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Dosya boyutu kontrolü
+document.getElementById('file').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const maxSize = 100 * 1024 * 1024; // 100MB
+        if (file.size > maxSize) {
+            alert('Dosya boyutu çok büyük! Maksimum 100MB olmalıdır.');
+            this.value = '';
+        }
+    }
+});
+
+// Form doğrulama
+document.querySelector('form').addEventListener('submit', function(e) {
+    const title = document.getElementById('title').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const category = document.getElementById('category').value;
+    const grade = document.getElementById('grade').value;
+    
+    if (!title || !description || !category || !grade) {
+        e.preventDefault();
+        alert('Lütfen tüm zorunlu alanları doldurun!');
+        return false;
+    }
+});
+</script>
+{% endblock %}

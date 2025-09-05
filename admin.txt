@@ -1,0 +1,26 @@
+# Admin Giriş Bilgileri
+# Bu dosya sadece yetkili kişiler tarafından görülebilir
+
+## Admin Kullanıcı Bilgileri
+Kullanıcı Adı: admin
+Şifre: admin123
+
+## Güvenlik Notları
+- Bu bilgileri güvenli bir yerde saklayın
+- Şifreyi düzenli olarak değiştirin
+- Sadece yetkili kişilerle paylaşın
+
+## Admin Paneli Özellikleri
+- Kullanıcı yönetimi
+- Ders yönetimi
+- Not yönetimi
+- Proje yönetimi
+- Soru yönetimi
+- İstatistikler ve raporlar
+
+## Erişim URL'si
+/admin/login
+
+## Son Güncelleme
+Tarih: 2024-01-XX
+Güncelleyen: Sistem Yöneticisi

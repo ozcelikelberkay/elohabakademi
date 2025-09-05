@@ -1,0 +1,725 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - ELOHAB AKADEMİ{% endblock %}
+
+{% block content %}
+<style>
+/* Admin Dashboard için özel stiller - Canlı ve Renkli Tasarım */
+:root {
+    --admin-primary: #FFD700;
+    --admin-secondary: #FF6B6B;
+    --admin-accent: #4ECDC4;
+    --admin-warning: #FFE66D;
+    --admin-info: #A8E6CF;
+    --admin-danger: #FF8A80;
+    --admin-dark: #2C3E50;
+    --admin-light: #ECF0F1;
+}
+
+.feature-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 2px solid var(--admin-primary);
+    border-radius: 20px;
+    color: #FFFFFF;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--admin-primary), var(--admin-accent), var(--admin-secondary));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    border-color: var(--admin-accent);
+}
+
+.feature-card .card-header {
+    background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-accent) 100%);
+    border: none;
+    border-radius: 18px 18px 0 0;
+    color: var(--admin-dark);
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card .table {
+    color: #FFFFFF;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.feature-card .table th {
+    background: linear-gradient(135deg, var(--admin-accent) 0%, var(--admin-info) 100%);
+    color: var(--admin-dark);
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+}
+
+.feature-card .table td {
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s ease;
+}
+
+.feature-card .table-hover tbody tr:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(78, 205, 196, 0.2) 100%);
+    color: #FFFFFF;
+    transform: scale(1.02);
+}
+
+.feature-card .form-control,
+.feature-card .form-select {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 2px solid var(--admin-primary);
+    border-radius: 12px;
+    color: #FFFFFF;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.feature-card .form-control:focus,
+.feature-card .form-select:focus {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+    border-color: var(--admin-accent);
+    color: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.3);
+    transform: scale(1.02);
+}
+
+.feature-card .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+}
+
+.feature-card .badge {
+    color: #FFFFFF;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Renkli Badge'ler */
+.badge.bg-primary {
+    background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%) !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, #1ABC9C 0%, #16A085 100%) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%) !important;
+}
+
+/* İstatistik Kartları */
+.stats-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--admin-primary), var(--admin-accent), var(--admin-secondary));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.stats-card:hover::before {
+    opacity: 0.1;
+}
+
+.stats-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    border-color: var(--admin-primary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.stats-card .card-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Butonlar */
+.btn-success {
+    background: linear-gradient(135deg, var(--admin-accent) 0%, var(--admin-info) 100%);
+    border: none;
+    border-radius: 12px;
+    color: var(--admin-dark);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-success::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn-success:hover::before {
+    left: 100%;
+}
+
+.btn-success:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(78, 205, 196, 0.4);
+    color: var(--admin-dark);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--admin-danger) 0%, #E74C3C 100%);
+    border: none;
+    border-radius: 12px;
+    color: #FFFFFF;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 138, 128, 0.4);
+    color: #FFFFFF;
+}
+
+.btn-outline-success {
+    border: 2px solid var(--admin-accent);
+    color: var(--admin-accent);
+    border-radius: 12px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background: var(--admin-accent);
+    color: var(--admin-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(78, 205, 196, 0.4);
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--admin-dark) 0%, #34495E 50%, var(--admin-dark) 100%);
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23FFD700" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section h1 {
+    background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+/* Hızlı İşlemler Kartı */
+.quick-actions-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 2px solid var(--admin-primary);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Animasyonlar */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in-up {
+    animation: slideInUp 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .feature-card {
+        margin-bottom: 2rem;
+    }
+    
+    .stats-card {
+        margin-bottom: 1.5rem;
+    }
+}
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-cog me-3"></i>
+                    Admin Dashboard
+                </h1>
+                <p class="lead mb-4">
+                    Elohab Akademi platform yönetimi ve içerik kontrolü
+                </p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-light">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active text-light" aria-current="page">Admin Panel</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard Content -->
+<section class="py-5">
+    <div class="container">
+        <!-- İstatistikler -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="card text-center stats-card slide-in-up" style="animation-delay: 0.1s;">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x mb-3" style="color: var(--admin-accent); filter: drop-shadow(0 0 10px rgba(78, 205, 196, 0.5));"></i>
+                        <h3 style="color: var(--admin-accent); font-weight: 800; text-shadow: 0 0 20px rgba(78, 205, 196, 0.5);">{{ users|length }}</h3>
+                        <p class="mb-0" style="color: rgba(255, 255, 255, 0.8); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Toplam Kullanıcı</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center stats-card slide-in-up" style="animation-delay: 0.2s;">
+                    <div class="card-body">
+                        <i class="fas fa-book fa-3x mb-3" style="color: var(--admin-primary); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));"></i>
+                        <h3 style="color: var(--admin-primary); font-weight: 800; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">{{ courses|length }}</h3>
+                        <p class="mb-0" style="color: rgba(255, 255, 255, 0.8); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Toplam Ders</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center stats-card slide-in-up" style="animation-delay: 0.3s;">
+                    <div class="card-body">
+                        <i class="fas fa-sticky-note fa-3x mb-3" style="color: var(--admin-info); filter: drop-shadow(0 0 10px rgba(168, 230, 207, 0.5));"></i>
+                        <h3 style="color: var(--admin-info); font-weight: 800; text-shadow: 0 0 20px rgba(168, 230, 207, 0.5);">{{ notes|length }}</h3>
+                        <p class="mb-0" style="color: rgba(255, 255, 255, 0.8); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Toplam Not</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center stats-card slide-in-up" style="animation-delay: 0.4s;">
+                    <div class="card-body">
+                        <i class="fas fa-question-circle fa-3x mb-3" style="color: var(--admin-secondary); filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.5));"></i>
+                        <h3 style="color: var(--admin-secondary); font-weight: 800; text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);">{{ questions|length }}</h3>
+                        <p class="mb-0" style="color: rgba(255, 255, 255, 0.8); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Toplam Soru</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kullanıcı Yönetimi -->
+        <div class="card feature-card mb-5">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-users me-2"></i>
+                    Kullanıcı Yönetimi
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-success">
+                            <tr>
+                                <th>ID</th>
+                                <th>Kullanıcı Adı</th>
+                                <th>E-posta</th>
+                                <th>Admin</th>
+                                <th>Kayıt Tarihi</th>
+                                <th>Son Giriş</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>
+                                    <strong>{{ user.username }}</strong>
+                                    {% if user.is_admin %}
+                                        <span class="badge bg-danger ms-2">Admin</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.is_admin %}
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    {% else %}
+                                        <i class="fas fa-times-circle text-muted"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.created_at.strftime('%d.%m.%Y') if user.created_at else 'N/A' }}</td>
+                                <td>{{ user.last_login.strftime('%d.%m.%Y %H:%M') if user.last_login else 'Hiç giriş yapmamış' }}</td>
+                                <td>
+                                    {% if not user.is_admin %}
+                                    <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" 
+                                          style="display: inline;" 
+                                          onsubmit="return confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash me-1"></i>Sil
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <span class="text-muted">Admin silinemez</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ders Yönetimi -->
+        <div class="card feature-card mb-5">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-book me-2"></i>
+                    Ders Yönetimi
+                </h4>
+            </div>
+            <div class="card-body">
+                <!-- Yeni Ders Ekleme -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="text-success mb-3">
+                            <i class="fas fa-plus me-2"></i>
+                            Yeni Ders Ekle
+                        </h5>
+                        <form method="POST" action="{{ url_for('add_course') }}" class="row g-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="name" placeholder="Ders Adı" required>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" name="grade" required>
+                                    <option value="">Sınıf</option>
+                                    <option value="1">1. Sınıf</option>
+                                    <option value="2">2. Sınıf</option>
+                                    <option value="3">3. Sınıf</option>
+                                    <option value="4">4. Sınıf</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" name="semester" required>
+                                    <option value="">Yarıyıl</option>
+                                    <option value="Güz">Güz</option>
+                                    <option value="Bahar">Bahar</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" name="description" placeholder="Açıklama" required>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Ders Listesi -->
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-success">
+                            <tr>
+                                <th>ID</th>
+                                <th>Ders Adı</th>
+                                <th>Sınıf</th>
+                                <th>Yarıyıl</th>
+                                <th>Açıklama</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in courses %}
+                            <tr>
+                                <td>{{ course.id }}</td>
+                                <td><strong>{{ course.name }}</strong></td>
+                                <td><span class="badge bg-primary">{{ course.grade }}. Sınıf</span></td>
+                                <td>
+                                    {% if course.semester == 'Güz' %}
+                                        <span class="badge bg-warning text-dark">{{ course.semester }}</span>
+                                    {% else %}
+                                        <span class="badge bg-info">{{ course.semester }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ course.description }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('delete_course', course_id=course.id) }}" 
+                                          style="display: inline;" 
+                                          onsubmit="return confirm('Bu dersi silmek istediğinizden emin misiniz?')">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash me-1"></i>Sil
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- İçerik Yönetimi -->
+        <div class="row g-4">
+            <!-- Notlar -->
+            <div class="col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-sticky-note me-2"></i>
+                            Ders Notları ({{ notes|length }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Başlık</th>
+                                        <th>Ders</th>
+                                        <th>Tarih</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for note in notes[:5] %}
+                                    <tr>
+                                        <td>{{ note.title }}</td>
+                                        <td>{{ note.course.name }}</td>
+                                        <td>{{ note.created_at.strftime('%d.%m.%Y') if note.created_at else 'N/A' }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if notes|length > 5 %}
+                        <div class="text-center mt-3">
+                            <small class="text-muted">Ve {{ notes|length - 5 }} not daha...</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sorular -->
+            <div class="col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-question-circle me-2"></i>
+                            Çıkmış Sorular ({{ questions|length }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Soru</th>
+                                        <th>Ders</th>
+                                        <th>Yıl</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for question in questions[:5] %}
+                                    <tr>
+                                        <td>{{ question.question_text[:50] }}...</td>
+                                        <td>{{ question.course.name }}</td>
+                                        <td>{{ question.year }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if questions|length > 5 %}
+                        <div class="text-center mt-3">
+                            <small class="text-muted">Ve {{ questions|length - 5 }} soru daha...</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projeler ve Mentorlar -->
+        <div class="row g-4 mt-4">
+            <!-- Projeler -->
+            <div class="col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-project-diagram me-2"></i>
+                            Projeler ({{ projects|length }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Başlık</th>
+                                        <th>Sınıf</th>
+                                        <th>Tarih</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for project in projects[:5] %}
+                                    <tr>
+                                        <td>{{ project.title }}</td>
+                                        <td>{{ project.grade }}. Sınıf</td>
+                                        <td>{{ project.created_at.strftime('%d.%m.%Y') if project.created_at else 'N/A' }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if projects|length > 5 %}
+                        <div class="text-center mt-3">
+                            <small class="text-muted">Ve {{ projects|length - 5 }} proje daha...</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mentorlar -->
+            <div class="col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-users me-2"></i>
+                            Mentorlar ({{ mentors|length }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Ad</th>
+                                        <th>Konu</th>
+                                        <th>İletişim</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mentor in mentors %}
+                                    <tr>
+                                        <td>{{ mentor.mentor_name }}</td>
+                                        <td>{{ mentor.subject }}</td>
+                                        <td>{{ mentor.contact }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hızlı İşlemler -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card quick-actions-card">
+                    <div class="card-body text-center">
+                        <h4 class="mb-4" style="color: var(--admin-primary); font-weight: 800; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">
+                            <i class="fas fa-rocket me-2 pulse-animation" style="color: var(--admin-accent);"></i>
+                            Hızlı İşlemler
+                        </h4>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="{{ url_for('index') }}" class="btn btn-success">
+                                <i class="fas fa-home me-2"></i>Ana Sayfaya Dön
+                            </a>
+                            <a href="{{ url_for('admin_logout') }}" class="btn btn-outline-success">
+                                <i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

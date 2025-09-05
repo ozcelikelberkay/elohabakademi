@@ -1,0 +1,92 @@
+1–4. Sınıflar – Elektronik ve Haberleşme Mühendisliği (Lisans)
+
+1. SINIF
+
+1. Yarıyıl (Güz):
+- 0207350 Lineer Cebir ve Mühendislik Uygulamaları
+- 0207351 Elektronik ve Haberleşme Mühendisliğine Giriş
+- 0207352 Bilgisayara Giriş
+- 0207506 Mesleki İngilizce
+- 9501005 Matematik I
+- 9501038 Fizik I
+- 9901012 Türk Dili I (UE)
+
+2. Yarıyıl (Bahar):
+- 0207354 Mühendislik Uygulamalarına Giriş
+- 9501006 Matematik II
+- 9501037 Fizik II
+- 9502023 Elektrik Devre Temelleri
+- 9502024 Ölçme ve Devre Laboratuvarı
+- 9502027 Bilgisayar Programlama
+- 9901013 Türk Dili II (UE)
+- 9912002 Kariyer Planlama
+
+2. SINIF
+
+3. Yarıyıl (Güz):
+- 0207357 Devre ve Sistem Teorisi
+- 0207359 Elektronik 1
+- 0207361 Elektronik Laboratuvarı 1
+- 9501017 Diferansiyel Denklemler
+- 9502026 Olasılık ve Raslantı Değişkenleri
+- 9502031 Sayısal Tasarım
+
+4. Yarıyıl (Bahar):
+- 0207364 Elektronik 2
+- 0207474 Elektronik Laboratuvarı 2
+- 0207475 Elektromagnetik Alan Teorisi
+- 9502032 Mikroişlemciler
+- 9502046 İşaret ve Sistemler
+- 0207503 İş Sağlığı ve Güvenliği - 1
+- Üniversite Seçmeli I (9911051 SPOR VE EGZERSİZ BESLENMESİ)
+
+3. SINIF
+
+5. Yarıyıl (Güz):
+- 0207370 Analog Haberleşme
+- 0207371 Sayısal İşaret İşleme
+- 0207473 Analog Haberleşme Laboratuvarı
+- 0207500 Elektromagnetik Dalga Teorisi
+- 0207504 İş Sağlığı ve Güvenliği - 2
+- 0207505 İş Hayatına Hazırlık, İnovasyon ve Proje Yönetimi
+- 0207515 Mühendislik Tasarımı - 1
+- 9905013 Atatürk İlkeleri ve İnkilap Tarihi I (UE)
+
+6. Yarıyıl (Bahar):
+- 0207376 Sayısal Haberleşme
+- 0207467 Staj-1
+- 0207498 Sayısal Haberleşme Laboratuvarı
+- 0207516 Mühendislik Tasarımı - 2
+- 9502033 Kontrol Sistemlerine Giriş
+- 9905014 Atatürk İlkeleri ve İnkilap Tarihi II
+- 0207407 İşaret İşleme Uygulamaları
+- 0207409 Uzaktan Algılama Teknolojileri
+
+4. SINIF
+
+7. Yarıyıl (Güz):
+- 0207517 Mühendislik Tasarımı - 3
+- 9502051 İşyeri Mühendislik Eğitimi
+- 9502052 İşyeri Mühendislik Uygulaması
+
+8. Yarıyıl (Bahar):
+- 0207518 Bitirme Çalışması
+- 0207468 Staj-2
+
+SEÇMELİ DERSLER:
+- 0207389 Mikrodalga Mühendisliği
+- 0207396 Geribeslemeli Sistemler
+- 0207397 Doğrusal Sistem Teorisine Giriş
+- 0207415 VLSI Tasarım
+- 9502030 İmge İşleme
+
+PROJELER:
+- MÜHTAS-1: Devre Tasarımı ve Simülasyon Projeleri
+- MÜHTAS-2: Haberleşme Sistemleri Projeleri
+- MÜHTAS-3: Mikroişlemci ve Gömülü Sistem Projeleri
+- BİTİRME: Elektronik ve Haberleşme Mühendisliği Bitirme Projeleri
+- GÖRÜNTÜ İŞLEME: Dijital Görüntü İşleme ve Analiz Projeleri
+
+
+
+

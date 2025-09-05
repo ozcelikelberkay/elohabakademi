@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Proje Düzenle - Elohab Akademi{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Proje Düzenle
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Proje Başlığı *</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   value="{{ project.title }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Proje Açıklaması *</label>
+                            <textarea class="form-control" id="description" name="description" rows="6" required>{{ project.description }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Proje Kategorisi *</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">Kategori seçin...</option>
+                                <option value="elektronik" {% if project.category == 'elektronik' %}selected{% endif %}>Elektronik Devre Projeleri</option>
+                                <option value="mikroislemci" {% if project.category == 'mikroislemci' %}selected{% endif %}>Mikroişlemci Projeleri</option>
+                                <option value="makine_ogrenmesi" {% if project.category == 'makine_ogrenmesi' %}selected{% endif %}>Makine Öğrenmesi & Derin Öğrenme</option>
+                                <option value="otomasyon" {% if project.category == 'otomasyon' %}selected{% endif %}>Otomasyon Projeleri</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="grade" class="form-label">Sınıf *</label>
+                            <select class="form-select" id="grade" name="grade" required>
+                                <option value="">Sınıf seçin...</option>
+                                <option value="1" {% if project.grade == 1 %}selected{% endif %}>1. Sınıf</option>
+                                <option value="2" {% if project.grade == 2 %}selected{% endif %}>2. Sınıf</option>
+                                <option value="3" {% if project.grade == 3 %}selected{% endif %}>3. Sınıf</option>
+                                <option value="4" {% if project.grade == 4 %}selected{% endif %}>4. Sınıf</option>
+                            </select>
+                        </div>
+                        
+                        {% if project.file_path %}
+                        <div class="mb-3">
+                            <label class="form-label">Mevcut Dosya</label>
+                            <div class="alert alert-info">
+                                <i class="fas fa-file me-2"></i>
+                                <strong>{{ project.file_name }}</strong> ({{ project.file_type }})
+                                <br>
+                                <small class="text-muted">
+                                    Boyut: {{ (project.file_size / 1024 / 1024) | round(2) }} MB
+                                </small>
+                                
+                                {% if project.archive_info %}
+                                <div class="mt-2">
+                                    <strong>Arşiv Bilgileri:</strong>
+                                    {% set archive_data = project.archive_info | from_json %}
+                                    <ul class="list-unstyled mt-1">
+                                        <li><small>Dosya Sayısı: {{ archive_data.file_count }}</small></li>
+                                        <li><small>Toplam Boyut: {{ (archive_data.total_size / 1024 / 1024) | round(2) }} MB</small></li>
+                                        {% if archive_data.files %}
+                                        <li><small>İçerik: {{ archive_data.files[:5] | join(', ') }}{% if archive_data.files | length > 5 %}...{% endif %}</small></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="mt-2">
+                                    <a href="{{ url_for('download_file', file_type='projects', filename=project.file_path.split('/')[-1]) }}" 
+                                       class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="fas fa-download me-1"></i>İndir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label for="file" class="form-label">
+                                {% if project.file_path %}Yeni Dosya Ekle (Mevcut dosyayı değiştirir){% else %}Dosya Ekle{% endif %}
+                            </label>
+                            <input type="file" class="form-control" id="file" name="file" 
+                                   accept=".zip,.rar,.pdf,.docx,.txt,.py,.cpp,.h,.ino">
+                            <div class="form-text">
+                                <strong>Desteklenen formatlar:</strong> ZIP, RAR, PDF, DOCX, TXT, PY, CPP, H, INO<br>
+                                <strong>Maksimum boyut:</strong> 100MB
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('projects') }}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-arrow-left me-1"></i>Geri Dön
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save me-1"></i>Değişiklikleri Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Dosya boyutu kontrolü
+document.getElementById('file').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const maxSize = 100 * 1024 * 1024; // 100MB
+        if (file.size > maxSize) {
+            alert('Dosya boyutu çok büyük! Maksimum 100MB olmalıdır.');
+            this.value = '';
+        }
+    }
+});
+
+// Form doğrulama
+document.querySelector('form').addEventListener('submit', function(e) {
+    const title = document.getElementById('title').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const category = document.getElementById('category').value;
+    const grade = document.getElementById('grade').value;
+    
+    if (!title || !description || !category || !grade) {
+        e.preventDefault();
+        alert('Lütfen tüm zorunlu alanları doldurun!');
+        return false;
+    }
+});
+</script>
+{% endblock %}

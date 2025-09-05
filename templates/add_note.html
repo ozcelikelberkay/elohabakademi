@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Ders Notu Ekle - Elohab Akademi{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>Yeni Ders Notu Ekle
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Not Başlığı *</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="course_id" class="form-label">Ders *</label>
+                            <select class="form-select" id="course_id" name="course_id" required>
+                                <option value="">Ders seçin...</option>
+                                {% for course in courses %}
+                                <option value="{{ course.id }}">
+                                    {{ course.code }} - {{ course.name }} ({{ course.grade }}. Sınıf, {{ course.semester }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                <strong>Toplam {{ courses|length }} ders bulundu</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Not İçeriği *</label>
+                            <textarea class="form-control" id="content" name="content" rows="6" required 
+                                      placeholder="Notunuzun içeriğini buraya yazın..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Dosya Ekle (Opsiyonel)</label>
+                            <input type="file" class="form-control" id="file" name="file" 
+                                   accept=".pdf,.docx,.png,.jpg,.jpeg,.gif,.bmp">
+                            <div class="form-text">
+                                <strong>Desteklenen formatlar:</strong> PDF, DOCX, PNG, JPG, GIF, BMP<br>
+                                <strong>Maksimum boyut:</strong> 50MB
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('notes') }}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-arrow-left me-1"></i>Geri Dön
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-1"></i>Notu Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Dosya boyutu kontrolü
+document.getElementById('file').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const maxSize = 50 * 1024 * 1024; // 50MB
+        if (file.size > maxSize) {
+            alert('Dosya boyutu çok büyük! Maksimum 50MB olmalıdır.');
+            this.value = '';
+        }
+    }
+});
+
+// Form doğrulama
+document.querySelector('form').addEventListener('submit', function(e) {
+    const title = document.getElementById('title').value.trim();
+    const courseId = document.getElementById('course_id').value;
+    const content = document.getElementById('content').value.trim();
+    
+    console.log('Form submission - Title:', title, 'Course ID:', courseId, 'Content length:', content.length);
+    
+    if (!title || !courseId || !content) {
+        e.preventDefault();
+        alert('Lütfen tüm zorunlu alanları doldurun!');
+        return false;
+    }
+    
+    // Ders seçimi kontrolü
+    if (courseId === '') {
+        e.preventDefault();
+        alert('Lütfen bir ders seçin!');
+        return false;
+    }
+    
+    console.log('Form validation passed, submitting...');
+});
+</script>
+{% endblock %}

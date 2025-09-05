@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block title %}Ders Notları - Elohab Bölümü{% endblock %}
+{% block body_class %}notes-page{% endblock %}
+
+<!-- PDF.js kütüphanesi -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    // PDF.js worker'ı ayarla
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
+
+{% block page_styles %}
+<style>
+    /* Notes page background applied to body - loaded after global CSS */
+    body.notes-page {
+        background: linear-gradient(135deg, rgba(10,10,10,0.25), rgba(26,26,26,0.55)),
+                    url('{{ url_for('static', filename='images/library.jpg') }}') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+    }
+    .notes-overlay-card {
+        background-color: rgba(26, 26, 26, 0.78) !important;
+        border: 1px solid rgba(255, 215, 0, 0.25);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+    /* Filtre butonlarını eşitle */
+    .filter-actions .btn { min-width: 140px; height: 42px; line-height: 42px; padding: 0 14px; font-weight: 600; border-radius: 10px; }
+    /* Kart altı butonları dikey ortala */
+    .card-footer .btn-group .btn-sm { display: flex; align-items: center; justify-content: center; height: 36px; line-height: 36px; }
+    /* Filtre blok hizalama */
+    .notes-filter .form-select { height: 42px; }
+    .notes-filter .filter-actions .btn { height: 42px; line-height: 42px; }
+    /* İstatistik kartları okunabilirlik */
+    .stats-card { 
+        background-color: rgba(26,26,26,0.82) !important; 
+        color: #E0E0E0 !important; 
+        border: 1px solid rgba(255,215,0,0.15) !important; 
+        border-radius: 18px; 
+        backdrop-filter: blur(2px);
+    }
+    .stats-card h4 { color: #FFD700 !important; font-weight: 700; }
+    .stats-card p { color: #E0E0E0 !important; margin-bottom: 0; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item active">Ders Notları</li>
+                </ol>
+            </nav>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Ders Notları</h1>
+                {% if session.user_id %}
+                <div class="btn-group">
+                    <a href="{{ url_for('add_note') }}" class="btn btn-success">
+                        <i class="fas fa-plus me-1"></i>Yeni Not Ekle
+                    </a>
+                    <a href="{{ url_for('add_question') }}" class="btn btn-warning">
+                        <i class="fas fa-file-upload me-1"></i>Yeni Sınav Ekle
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Filtre -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="GET" class="row g-3 align-items-center notes-filter" id="filterForm">
+                        <div class="col-12 col-lg-8">
+                            <label for="course_id" class="form-label">Ders Seçin:</label>
+                            <select class="form-select" id="course_id" name="course_id" onchange="updateFilterInfo()">
+                                <option value="">Tüm Dersler</option>
+                                {% for course in courses %}
+                                <option value="{{ course.id }}" {% if selected_course == course.id %}selected{% endif %}>
+                                    {{ course.code }} - {{ course.name }} ({{ course.grade }}. Sınıf, {{ course.semester }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text mt-2" id="filterInfo">
+                                <strong>{{ courses|length }} ders bulundu</strong> - Seçilen: {% if selected_course %}{{ selected_course }}{% else %}Tümü{% endif %}
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-4 d-flex align-items-end filter-actions">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-filter me-1"></i>Filtrele
+                            </button>
+                            <a href="{{ url_for('notes') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Temizle
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Notlar -->
+            {% if notes %}
+                <div class="row">
+                    {% for note in notes %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm notes-overlay-card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">{{ note.title }}</h5>
+                                <p class="card-text">{{ note.content[:150] }}{% if note.content|length > 150 %}...{% endif %}</p>
+                                
+                                <!-- Dosya bilgileri -->
+                                {% if note.file_path %}
+                                <div class="alert alert-info py-2 mb-2">
+                                    <i class="fas fa-file me-2"></i>
+                                    <strong>{{ note.file_name or 'Dosya' }}</strong>
+                                    {% if note.file_type %}
+                                    <span class="badge bg-secondary ms-2">{{ note.file_type }}</span>
+                                    {% endif %}
+                                    {% if note.file_size %}
+                                    <small class="text-muted ms-2">({{ (note.file_size / 1024 / 1024) | round(2) }} MB)</small>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-info">{{ note.course.name }}</span>
+                                    <span class="badge bg-secondary">{{ note.course.grade }}. Sınıf</span>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="btn-group w-100" role="group">
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#noteModal{{ note.id }}">
+                                        <i class="fas fa-eye me-1"></i>Detay
+                                    </button>
+                                    
+                                    {% if note.file_url %}
+                                    <a href="{{ url_for('download_file', file_type='notes', filename=note.file_url) }}" 
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-download me-1"></i>İndir
+                                    </a>
+                                    {% endif %}
+                                    
+                                    {% if session.user_id == note.uploaded_by or session.is_admin %}
+                                    <a href="{{ url_for('edit_note', note_id=note.id) }}" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Düzenle
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" 
+                                            onclick="deleteNote({{ note.id }})">
+                                        <i class="fas fa-trash me-1"></i>Sil
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="noteModal{{ note.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ note.title }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <span class="badge bg-info me-2">{{ note.course.name }}</span>
+                                        <span class="badge bg-secondary">{{ note.course.grade }}. Sınıf</span>
+                                        {% if note.user %}
+                                        <span class="badge bg-success">{{ note.user.username }}</span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    {% if note.file_path %}
+                                    <div class="alert alert-info mb-3">
+                                        <i class="fas fa-file me-2"></i>
+                                        <strong>{{ note.file_name or 'Dosya' }}</strong>
+                                        {% if note.file_type %}
+                                        <span class="badge bg-secondary ms-2">{{ note.file_type }}</span>
+                                        {% endif %}
+                                        {% if note.file_size %}
+                                        <small class="text-muted ms-2">({{ (note.file_size / 1024 / 1024) | round(2) }} MB)</small>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="note-content">
+                                        {{ note.content|safe }}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                    {% if note.file_url %}
+                                    <a href="{{ url_for('download_file', file_type='notes', filename=note.file_url) }}" 
+                                       class="btn btn-primary">
+                                        <i class="fas fa-download me-1"></i>İndir
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Seçilen kriterlere uygun ders notu bulunamadı.
+                    {% if session.user_id %}
+                    <br><a href="{{ url_for('add_note') }}" class="btn btn-success mt-2">
+                        <i class="fas fa-plus me-1"></i>İlk Notu Ekle
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+            <!-- İstatistikler -->
+            <div class="mt-5">
+                <h3>Not İstatistikleri</h3>
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-0 stats-card">
+                            <div class="card-body">
+                                <h4 class="text-primary">{{ notes|length }}</h4>
+                                <p class="card-text">Toplam Not</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-0 stats-card">
+                            <div class="card-body">
+                                <h4 class="text-success">{{ courses|length }}</h4>
+                                <p class="card-text">Toplam Ders</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-0 stats-card">
+                            <div class="card-body">
+                                <h4 class="text-warning">4</h4>
+                                <p class="card-text">Sınıf Sayısı</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-0 stats-card">
+                            <div class="card-body">
+                                <h4 class="text-info">{{ notes|length // courses|length if courses else 0 }}</h4>
+                                <p class="card-text">Ders Başına Not</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Not silme
+function deleteNote(noteId) {
+    if (confirm('Bu notu silmek istediğinizden emin misiniz?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/notes/delete/${noteId}`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Filtre bilgisini güncelle
+function updateFilterInfo() {
+    const courseSelect = document.getElementById('course_id');
+    const filterInfo = document.getElementById('filterInfo');
+    const selectedValue = courseSelect.value;
+    const selectedText = courseSelect.options[courseSelect.selectedIndex].text;
+    
+    if (selectedValue) {
+        filterInfo.innerHTML = `<strong>Seçilen Ders:</strong> ${selectedText}`;
+    } else {
+        filterInfo.innerHTML = `<strong>{{ courses|length }} ders bulundu</strong> - Tümü seçildi`;
+    }
+}
+
+// Sayfa yüklendiğinde filtre bilgisini güncelle
+document.addEventListener('DOMContentLoaded', function() {
+    updateFilterInfo();
+});
+
+</script>
+{% endblock %} 

@@ -1,0 +1,64 @@
+# Development files
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache/
+.pytest_cache/
+.hypothesis/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+temp/
+
+# Test files
+tests/
+test_*.py
+*_test.py
+pytest.ini
+
+# Documentation
+htmlcov/
+docs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Original app files (not needed for Vercel)
+app.py
+app_cloudflare.py
+launch_live.py
+start_*.py
+setup_ngrok.py
+run_tests.py

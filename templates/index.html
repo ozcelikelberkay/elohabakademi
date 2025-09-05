@@ -1,0 +1,2027 @@
+{% extends "base.html" %}
+
+{% block title %}ELOHAB AKADEMİ - Premium Mühendislik Eğitimi{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden">
+    <!-- Floating Advertisement Texts -->
+    <div class="floating-ads">
+        <!-- Top Left Corner -->
+        <div class="floating-ad top-left" onclick="showHocTechInfo()">
+            <div class="ad-text">
+                <i class="fas fa-code me-2"></i>
+                Yazılım Projeleri HocTech Tarafından Yapılır
+            </div>
+        </div>
+        
+        <!-- Top Right Corner -->
+        <div class="floating-ad top-right" onclick="showHocTechInfo()">
+            <div class="ad-text">
+                <i class="fas fa-laptop-code me-2"></i>
+                Profesyonel Yazılım Çözümleri - HocTech
+            </div>
+        </div>
+        
+        <!-- Bottom Left Corner -->
+        <div class="floating-ad bottom-left" onclick="showHocTechInfo()">
+            <div class="ad-text">
+                <i class="fas fa-rocket me-2"></i>
+                İnovatif Teknoloji Projeleri - HocTech
+            </div>
+        </div>
+        
+        <!-- Bottom Right Corner -->
+        <div class="floating-ad bottom-right" onclick="showHocTechInfo()">
+            <div class="ad-text">
+                <i class="fas fa-cogs me-2"></i>
+                Özel Yazılım Geliştirme Hizmetleri
+            </div>
+        </div>
+    </div>
+    <div class="hero-background">
+        <div class="hero-image-container">
+            <img src="{{ url_for('static', filename='images/processor.jpeg') }}" alt="Processor Background" class="hero-background-image">
+            <div class="hero-image-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="container h-100">
+                <div class="row align-items-center h-100">
+                    <div class="col-lg-6 d-flex align-items-center">
+                        <div class="hero-text fade-in-up">
+                            <h1 class="hero-title mb-4">
+                                Mühendislik Eğitiminde
+                                <span class="text-gradient">Yeni Çağ</span>
+                            </h1>
+                            <p class="hero-subtitle mb-5">
+                                Elektronik ve Haberleşme Mühendisliği öğrencileri için premium kaynak platformu. 
+                                Sınıf bazlı ders notları, projeler ve mentorluk hizmetleri ile kariyerinizi şekillendirin.
+                            </p>
+                            <div class="hero-buttons d-flex flex-wrap gap-3">
+                                <a href="{{ url_for('notes') if session.get('user_id') else url_for('register') }}" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-rocket me-2"></i>Hemen Başla
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-flex align-items-center">
+                        <div class="hero-form-container fade-in-up" style="animation-delay: 0.2s;">
+                            <div class="hero-form glass">
+                                <div class="form-header text-center mb-4">
+                                    <div class="form-icon-container mb-3">
+                                        <i class="fas fa-graduation-cap fa-3x text-primary-gold"></i>
+                                    </div>
+                                    <h3 class="form-title mb-2">Ders Seçimi</h3>
+                                    <p class="form-subtitle text-muted">Sınıfınızı seçerek hemen başlayın</p>
+                                </div>
+                                
+                                <div class="form-body">
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">
+                                            <i class="fas fa-star me-2 text-warning"></i>SINIF SEÇİN
+                                        </label>
+                                        <div class="dropdown w-100">
+                                            <button class="btn btn-outline-primary w-100 text-start d-flex justify-content-between align-items-center" 
+                                                    type="button" id="derslerDropdown" data-bs-toggle="dropdown">
+                                                <span class="d-flex align-items-center">
+                                                    <i class="fas fa-graduation-cap me-2 text-primary-gold"></i>
+                                                    Sınıfınızı Seçin
+                                                </span>
+                                                <i class="fas fa-chevron-down text-primary-gold"></i>
+                                            </button>
+                                            <ul class="dropdown-menu w-100">
+                                                <li><a class="dropdown-item" href="{{ url_for('grade_page', grade=1) }}">
+                                                    <i class="fas fa-star me-2 text-warning"></i>1. Sınıf
+                                                    <span class="badge bg-primary-gold text-dark ms-auto">Başlangıç</span>
+                                                </a></li>
+                                                <li><a class="dropdown-item" href="{{ url_for('grade_page', grade=2) }}">
+                                                    <i class="fas fa-star me-2 text-warning"></i>2. Sınıf
+                                                    <span class="badge bg-success text-white ms-auto">Temel</span>
+                                                </a></li>
+                                                <li><a class="dropdown-item" href="{{ url_for('grade_page', grade=3) }}">
+                                                    <i class="fas fa-star me-2 text-warning"></i>3. Sınıf
+                                                    <span class="badge bg-warning text-dark ms-auto">İleri</span>
+                                                </a></li>
+                                                <li><a class="dropdown-item" href="{{ url_for('grade_page', grade=4) }}">
+                                                    <i class="fas fa-star me-2 text-warning"></i>4. Sınıf
+                                                    <span class="badge bg-info text-white ms-auto">Uzman</span>
+                                                </a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-info mb-4">
+                                        <div class="info-card">
+                                            <div class="info-icon">
+                                                <i class="fas fa-info-circle text-primary-gold"></i>
+                                            </div>
+                                            <div class="info-content">
+                                                <h6 class="info-title">Hızlı Erişim</h6>
+                                                <p class="info-text">Sınıfınızı seçerek derslerinize hemen erişin</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-features">
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <div class="feature-item">
+                                                    <i class="fas fa-book text-primary-gold"></i>
+                                                    <span>Ders Notları</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="feature-item">
+                                                    <i class="fas fa-project-diagram text-primary-gold"></i>
+                                                    <span>Projeler</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="feature-item">
+                                                    <i class="fas fa-question-circle text-primary-gold"></i>
+                                                    <span>Sorular</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="feature-item">
+                                                    <i class="fas fa-users text-primary-gold"></i>
+                                                    <span>Mentorluk</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Access Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title mb-3">
+                <span class="text-gradient">Hızlı Erişim</span>
+            </h2>
+            <p class="section-subtitle text-muted">
+                En popüler konulara hızlıca ulaşın
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ url_for('search', q='matematik') }}" class="quick-access-card">
+                    <div class="card feature-card h-100 text-center border-0">
+                        <div class="card-body p-4">
+                            <div class="icon-container mb-3">
+                                <i class="fas fa-calculator fa-2x text-primary-gold"></i>
+                            </div>
+                            <h5 class="card-title">Matematik</h5>
+                            <p class="card-text text-muted small">Analiz, Lineer Cebir, Diferansiyel Denklemler</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ url_for('search', q='elektronik') }}" class="quick-access-card">
+                    <div class="card feature-card h-100 text-center border-0">
+                        <div class="card-body p-4">
+                            <div class="icon-container mb-3">
+                                <i class="fas fa-microchip fa-2x text-primary-gold"></i>
+                            </div>
+                            <h5 class="card-title">Elektronik</h5>
+                            <p class="card-text text-muted small">Devre Analizi, Sinyal İşleme, Sistemler</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ url_for('search', q='proje') }}" class="quick-access-card">
+                    <div class="card feature-card h-100 text-center border-0">
+                        <div class="card-body p-4">
+                            <div class="icon-container mb-3">
+                                <i class="fas fa-project-diagram fa-2x text-primary-gold"></i>
+                            </div>
+                            <h5 class="card-title">Projeler</h5>
+                            <p class="card-text text-muted small">Uygulama Projeleri, Laboratuvar Çalışmaları</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ url_for('search', q='laboratuvar') }}" class="quick-access-card">
+                    <div class="card feature-card h-100 text-center border-0">
+                        <div class="card-body p-4">
+                            <div class="icon-container mb-3">
+                                <i class="fas fa-flask fa-2x text-primary-gold"></i>
+                            </div>
+                            <h5 class="card-title">Laboratuvar</h5>
+                            <p class="card-text text-muted small">Deneyler, Ölçümler, Raporlar</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-gradient-dark">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title mb-3">
+                Platform <span class="text-gradient">Özellikleri</span>
+            </h2>
+            <p class="section-subtitle text-muted">
+                ELOHAB AKADEMİ'nin sunduğu premium hizmetler
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon mb-4">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-graduation-cap fa-3x text-primary-gold"></i>
+                        </div>
+                    </div>
+                    <h4 class="feature-title mb-3">Sınıf Bazlı Dersler</h4>
+                    <p class="feature-description text-muted mb-4">
+                        Her sınıf için özel olarak düzenlenmiş ders programları, 
+                        kapsamlı notlar ve çıkmış sorular ile hedefli öğrenim.
+                    </p>
+                    <a href="{{ url_for('grade_page', grade=1) }}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-right me-2"></i>Dersleri Keşfet
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon mb-4">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-project-diagram fa-3x text-primary-gold"></i>
+                        </div>
+                    </div>
+                    <h4 class="feature-title mb-3">Proje Kütüphanesi</h4>
+                    <p class="feature-description text-muted mb-4">
+                        Sınıf seviyelerine uygun proje örnekleri, 
+                        uygulama projeleri ve detaylı açıklamalar.
+                    </p>
+                    <a href="{{ url_for('projects') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-right me-2"></i>Projeleri İncele
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon mb-4">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-users fa-3x text-primary-gold"></i>
+                        </div>
+                    </div>
+                    <h4 class="feature-title mb-3">Mentorluk Sistemi</h4>
+                    <p class="feature-description text-muted mb-4">
+                        Deneyimli mentorlar ile birebir görüşme, 
+                        akademik destek ve kariyer rehberliği.
+                    </p>
+                    <a href="{{ url_for('mentorship') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-right me-2"></i>Mentorları Gör
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon mb-4">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-shield-alt fa-3x text-primary-gold"></i>
+                        </div>
+                    </div>
+                    <h4 class="feature-title mb-3">Güvenli Platform</h4>
+                    <p class="feature-description text-muted mb-4">
+                        Üye olarak güvenli bir şekilde platform özelliklerinden yararlanın; reklam veya ödeme yok.
+                    </p>
+                    <a href="{{ url_for('notes') if session.get('user_id') else url_for('register') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-right me-2"></i>{{ 'Derslere Git' if session.get('user_id') else 'Üye Ol' }}
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon mb-4">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-search fa-3x text-primary-gold"></i>
+                        </div>
+                    </div>
+                    <h4 class="feature-title mb-3">Gelişmiş Arama</h4>
+                    <p class="feature-description text-muted mb-4">
+                        Ders notları, sorular ve projeler arasında 
+                        hızlı ve etkili arama yapın.
+                    </p>
+                    <a href="{{ url_for('search') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-right me-2"></i>Arama Yap
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon mb-4">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-mobile-alt fa-3x text-primary-gold"></i>
+                        </div>
+                    </div>
+                    <h4 class="feature-title mb-3">Mobil Uyumlu</h4>
+                    <p class="feature-description text-muted mb-4">
+                        Tüm cihazlarda mükemmel görünüm, 
+                        her yerden erişim imkanı.
+                    </p>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-right me-2"></i>Test Et
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="about-content fade-in-up">
+                    <h2 class="section-title mb-4">
+                        <span class="text-gradient">Hakkımızda</span>
+                    </h2>
+                    <p class="about-description text-muted mb-4">
+                        ELOHAB AKADEMİ, Elektronik ve Haberleşme Mühendisliği öğrencileri için özel olarak tasarlanmış 
+                        premium bir platformdur. Akademi kurulu ama yardımlaşma için tasarlandı.
+                    </p>
+                    <p class="about-description text-muted mb-4">
+                        Amacımız, öğrencilerin akademik başarılarını artırmak, bilgi paylaşımını teşvik etmek 
+                        ve mühendislik eğitiminde kaliteyi yükseltmektir.
+                    </p>
+                    <p class="about-description text-muted mb-4">
+                        <strong class="text-primary-gold">Premium Eğitim:</strong> Kaliteli içerik, profesyonel tasarım ile 
+                        öğrencilerimize en iyi eğitim deneyimini sunuyoruz.
+                    </p>
+                    <div class="about-stats d-flex gap-4 mb-4">
+                        <div class="stat-item text-center">
+                            <div class="stat-number text-primary-gold fw-bold fs-2">4</div>
+                            <div class="stat-label text-muted small">Sınıf</div>
+                        </div>
+                        <div class="stat-item text-center">
+                            <div class="stat-number text-primary-gold fw-bold fs-2">50+</div>
+                            <div class="stat-label text-muted small">Ders</div>
+                        </div>
+                        <div class="stat-item text-center">
+                            <div class="stat-number text-primary-gold fw-bold fs-2">100+</div>
+                            <div class="stat-label text-muted small">Proje</div>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('about') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Daha Fazla Bilgi
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-visual text-center fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="about-image-container">
+                        <img src="{{ url_for('static', filename='images/ehmheadericon.png') }}" alt="EHM Logo" class="img-fluid" style="width: 300px; height: 300px; object-fit: cover; border-radius: 20px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-gradient-primary">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <div class="cta-content fade-in-up">
+                    <h2 class="cta-title mb-4">
+                        Mühendislik Kariyerinizi <span class="text-white">Şekillendirin</span>
+                    </h2>
+                    <p class="cta-description text-white-50 mb-5">
+                        ELOHAB AKADEMİ'ye katılarak premium eğitim kaynaklarına erişim sağlayın. 
+                        Hemen üye olun ve öğrenme yolculuğunuza başlayın.
+                    </p>
+                    <div class="cta-buttons d-flex flex-wrap justify-content-center gap-3">
+                        <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Ücretsiz Üye Ol
+                        </a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Hero Section Styles with Background Image */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    height: 100vh;
+    background: var(--dark-bg);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.hero-background {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    height: 100vh;
+    width: 100%;
+}
+
+.hero-background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: none;
+}
+
+.hero-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.4) 0%, rgba(26, 26, 26, 0.3) 50%, rgba(15, 15, 15, 0.5) 100%);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--text-primary);
+}
+
+/* Responsive tasarım */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 100vh;
+        min-height: 100vh;
+    }
+    
+    .hero-background {
+        height: 100vh;
+    }
+    
+    .hero-image-container {
+        height: 100vh;
+    }
+    
+    .hero-content {
+        height: 100vh;
+    }
+    
+    .hero-text {
+        height: 100%;
+        justify-content: center;
+    }
+    
+    .hero-form-container {
+        height: 100%;
+        align-items: center;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero-form {
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+}
+
+/* Büyük ekranlar için ek düzenlemeler */
+@media (min-width: 1200px) {
+    .hero-section {
+        height: 90vh; /* 100vh yerine 90vh - daha dengeli */
+        min-height: 90vh;
+    }
+    
+    .hero-background {
+        height: 90vh;
+    }
+    
+    .hero-image-container {
+        height: 90vh;
+    }
+    
+    .hero-content {
+        height: 90vh;
+    }
+    
+    .hero-text {
+        height: 100%;
+        justify-content: center;
+    }
+    
+    .hero-form-container {
+        height: 100%;
+        align-items: center;
+    }
+    
+    /* Büyük ekranlarda hero title'ı daha büyük yap */
+    .hero-title {
+        font-size: 4rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.4rem;
+    }
+}
+
+/* Çok büyük ekranlar için (1400px+) */
+@media (min-width: 1400px) {
+    .hero-section {
+        height: 85vh; /* Daha da azalt */
+        min-height: 85vh;
+    }
+    
+    .hero-background {
+        height: 85vh;
+    }
+    
+    .hero-image-container {
+        height: 85vh;
+    }
+    
+    .hero-content {
+        height: 85vh;
+    }
+    
+    .hero-title {
+        font-size: 4.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    /* Büyük ekranlarda container'ı sınırla */
+    .container {
+        max-width: 1320px;
+    }
+}
+
+/* Ultra geniş ekranlar için (1600px+) */
+@media (min-width: 1600px) {
+    .hero-section {
+        height: 80vh;
+        min-height: 80vh;
+    }
+    
+    .hero-background {
+        height: 80vh;
+    }
+    
+    .hero-image-container {
+        height: 80vh;
+    }
+    
+    .hero-content {
+        height: 80vh;
+    }
+    
+    .hero-title {
+        font-size: 5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.6rem;
+    }
+    
+    /* Ultra geniş ekranlarda container'ı daha da sınırla */
+    .container {
+        max-width: 1400px;
+    }
+    
+    /* Hero form'u daha büyük yap */
+    .hero-form {
+        padding: 3rem;
+        max-width: 500px;
+    }
+    
+    .form-title {
+        font-size: 1.8rem;
+    }
+    
+    .form-subtitle {
+        font-size: 1rem;
+    }
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.hero-text {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.hero-form-container {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.hero-form {
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(25px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.1);
+    position: relative;
+    overflow: visible;
+    max-width: 100%;
+    height: fit-content;
+    width: 100%;
+}
+
+.hero-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold), var(--bitcoin-orange));
+    border-radius: 20px 20px 0 0;
+}
+
+.form-header {
+    margin-bottom: 1.5rem;
+}
+
+.form-icon-container {
+    margin-bottom: 0.5rem;
+}
+
+.form-title {
+    color: var(--text-primary);
+    font-weight: 800;
+    font-size: 1.4rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.form-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.form-body {
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    color: var(--primary-gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.form-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 10px;
+    border-left: 3px solid var(--primary-gold);
+}
+
+.form-info {
+    margin-bottom: 1.25rem;
+}
+
+.info-card {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid var(--primary-gold);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: var(--accent-gold);
+    transform: translateX(3px);
+}
+
+.info-icon {
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 215, 0, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--primary-gold);
+    flex-shrink: 0;
+}
+
+.info-content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.info-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+}
+
+.info-text {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    line-height: 1.3;
+}
+
+.form-features {
+    margin-top: 1.25rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-item i {
+    font-size: 0.75rem;
+    color: var(--primary-gold);
+    flex-shrink: 0;
+}
+
+.feature-item span {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Quick Access Cards */
+.quick-access-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.quick-access-card:hover {
+    transform: translateY(-5px);
+    text-decoration: none;
+    color: inherit;
+}
+
+.icon-container {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 2px solid var(--primary-gold);
+}
+
+/* Büyük ekranlar için quick access card optimizasyonları */
+@media (min-width: 1200px) {
+    .icon-container {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .quick-access-card .card-title {
+        font-size: 1.2rem;
+    }
+    
+    .quick-access-card .card-text {
+        font-size: 0.95rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .icon-container {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .quick-access-card .card-title {
+        font-size: 1.3rem;
+    }
+    
+    .quick-access-card .card-text {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    .icon-container {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .quick-access-card .card-title {
+        font-size: 1.4rem;
+    }
+    
+    .quick-access-card .card-text {
+        font-size: 1.05rem;
+    }
+}
+
+/* About Section */
+.about-content {
+    padding-right: 2rem;
+}
+
+.about-description {
+    font-size: 1.125rem;
+    line-height: 1.7;
+}
+
+.about-visual {
+    padding-left: 2rem;
+}
+
+.about-image-container {
+    position: relative;
+}
+
+.about-image {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Büyük ekranlar için about section optimizasyonları */
+@media (min-width: 1200px) {
+    .about-content {
+        padding-right: 3rem;
+    }
+    
+    .about-visual {
+        padding-left: 3rem;
+    }
+    
+    .about-description {
+        font-size: 1.2rem;
+    }
+    
+    .about-image-container img {
+        width: 350px !important;
+        height: 350px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .about-content {
+        padding-right: 4rem;
+    }
+    
+    .about-visual {
+        padding-left: 4rem;
+    }
+    
+    .about-description {
+        font-size: 1.3rem;
+    }
+    
+    .about-image-container img {
+        width: 400px !important;
+        height: 400px !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    .about-content {
+        padding-right: 5rem;
+    }
+    
+    .about-visual {
+        padding-left: 5rem;
+    }
+    
+    .about-description {
+        font-size: 1.4rem;
+    }
+    
+    .about-image-container img {
+        width: 450px !important;
+        height: 450px !important;
+    }
+}
+
+/* Stats */
+.stat-item {
+    flex: 1;
+}
+
+.stat-number {
+    font-weight: 800;
+}
+
+.stat-label {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* CTA Section */
+.cta-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--dark-bg);
+}
+
+.cta-description {
+    font-size: 1.125rem;
+}
+
+/* Büyük ekranlar için CTA section optimizasyonları */
+@media (min-width: 1200px) {
+    .cta-title {
+        font-size: 3rem;
+    }
+    
+    .cta-description {
+        font-size: 1.25rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .cta-title {
+        font-size: 3.5rem;
+    }
+    
+    .cta-description {
+        font-size: 1.4rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    .cta-title {
+        font-size: 4rem;
+    }
+    
+    .cta-description {
+        font-size: 1.5rem;
+    }
+}
+
+/* Genel container optimizasyonları */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1400px;
+    }
+}
+
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1600px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .hero-form {
+        margin-top: 2rem;
+    }
+    
+    .about-content {
+        padding-right: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .about-visual {
+        padding-left: 0;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Glassmorphism */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animations */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-form .dropdown-menu {
+    background: rgba(26, 26, 26, 0.98);
+    border: 2px solid var(--primary-gold);
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(25px);
+    margin-top: 0.5rem;
+    max-width: 100%;
+    min-width: 200px;
+}
+
+.hero-form .dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    margin: 0.25rem 0.5rem;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hero-form .dropdown-item:hover {
+    background: rgba(255, 215, 0, 0.15);
+    color: var(--primary-gold);
+    transform: translateX(3px);
+}
+
+.hero-form .dropdown-item .badge {
+    margin-left: auto;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.3rem;
+    flex-shrink: 0;
+}
+
+.hero-form .btn-outline-primary {
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid var(--primary-gold);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 0.875rem 1.25rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.hero-form .btn-outline-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.hero-form .btn-outline-primary:hover::before {
+    left: 100%;
+}
+
+.hero-form .btn-outline-primary:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: var(--accent-gold);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+    color: var(--primary-gold);
+}
+
+.bg-primary-gold {
+    background-color: var(--primary-gold) !important;
+}
+
+.bg-success {
+    background-color: var(--success-green) !important;
+}
+
+.bg-warning {
+    background-color: var(--accent-gold) !important;
+}
+
+.bg-info {
+    background-color: var(--bitcoin-orange) !important;
+}
+
+.badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1.25rem;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    margin: 0.25rem 0.5rem;
+    position: relative;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 215, 0, 0.15);
+    color: var(--primary-gold);
+    transform: translateX(5px);
+}
+
+.dropdown-item .badge {
+    margin-left: auto;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-form {
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+    
+    .form-title {
+        font-size: 1.2rem;
+    }
+    
+    .form-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .form-features .row {
+        margin: 0;
+    }
+    
+    .feature-item {
+        font-size: 0.75rem;
+        padding: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .info-card {
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .info-title {
+        font-size: 0.75rem;
+    }
+    
+    .info-text {
+        font-size: 0.65rem;
+    }
+    
+    .dropdown-menu {
+        min-width: 180px;
+        max-width: calc(100vw - 2rem);
+    }
+    
+    .dropdown-item {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .dropdown-item .badge {
+        font-size: 0.55rem;
+        padding: 0.1rem 0.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-form {
+        padding: 1.25rem;
+    }
+    
+    .form-header {
+        margin-bottom: 1rem;
+    }
+    
+    .form-body {
+        margin-top: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-features .col-6 {
+        padding: 0 0.25rem;
+    }
+    
+    .feature-item {
+        font-size: 0.7rem;
+        padding: 0.3rem;
+        margin-bottom: 0.3rem;
+    }
+}
+
+/* Section Styles */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-muted);
+}
+
+/* Büyük ekranlar için section optimizasyonları */
+@media (min-width: 1200px) {
+    .section-title {
+        font-size: 3rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.25rem;
+    }
+    
+    /* Büyük ekranlarda section padding'lerini artır */
+    .py-5 {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .section-title {
+        font-size: 3.5rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.4rem;
+    }
+    
+    /* Çok büyük ekranlarda daha fazla padding */
+    .py-5 {
+        padding-top: 5rem !important;
+        padding-bottom: 5rem !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    .section-title {
+        font-size: 4rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    /* Ultra geniş ekranlarda maksimum padding */
+    .py-5 {
+        padding-top: 6rem !important;
+        padding-bottom: 6rem !important;
+    }
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(135deg, rgba(34, 34, 34, 0.8) 0%, rgba(34, 34, 34, 0.8) 100%), url('{{ url_for("static", filename="images/motherboardblack.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+}
+
+/* Feature Cards */
+.feature-card {
+    background: linear-gradient(135deg, var(--card-bg) 0%, #222222 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold), var(--bitcoin-orange));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px var(--shadow-dark);
+    border-color: var(--primary-gold);
+}
+
+.feature-icon {
+    text-align: center;
+}
+
+.icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 2px solid var(--primary-gold);
+}
+
+.feature-title {
+    color: var(--text-primary);
+    font-weight: 700;
+    text-align: center;
+}
+
+.feature-description {
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* Büyük ekranlar için feature card optimizasyonları */
+@media (min-width: 1200px) {
+    .feature-card {
+        padding: 2.5rem;
+    }
+    
+    .icon-wrapper {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .feature-title {
+        font-size: 1.3rem;
+    }
+    
+    .feature-description {
+        font-size: 1.1rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .feature-card {
+        padding: 3rem;
+    }
+    
+    .icon-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .feature-title {
+        font-size: 1.4rem;
+    }
+    
+    .feature-description {
+        font-size: 1.15rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    .feature-card {
+        padding: 3.5rem;
+    }
+    
+    .icon-wrapper {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .feature-title {
+        font-size: 1.5rem;
+    }
+    
+    .feature-description {
+        font-size: 1.2rem;
+    }
+}
+
+/* ===== FLOATING ADVERTISEMENT ANIMATIONS ===== */
+
+.floating-ads {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.floating-ad {
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.floating-ad .ad-text {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.9) 0%, rgba(255, 165, 0, 0.8) 100%);
+    color: var(--dark-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.floating-ad:hover .ad-text {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+/* Top Left - Diagonal sliding */
+.floating-ad.top-left {
+    top: 20px;
+    left: -300px;
+    animation-name: slideTopLeft;
+}
+
+@keyframes slideTopLeft {
+    0% { left: -300px; top: 20px; }
+    25% { left: 20px; top: 20px; }
+    50% { left: 20px; top: 20px; }
+    75% { left: 20px; top: 20px; }
+    100% { left: -300px; top: 20px; }
+}
+
+/* Top Right - Sliding from right */
+.floating-ad.top-right {
+    top: 20px;
+    right: -350px;
+    animation-name: slideTopRight;
+    animation-delay: 2s;
+}
+
+@keyframes slideTopRight {
+    0% { right: -350px; top: 20px; }
+    25% { right: 20px; top: 20px; }
+    50% { right: 20px; top: 20px; }
+    75% { right: 20px; top: 20px; }
+    100% { right: -350px; top: 20px; }
+}
+
+/* Bottom Left - Bouncing slide */
+.floating-ad.bottom-left {
+    bottom: 20px;
+    left: -320px;
+    animation-name: slideBottomLeft;
+    animation-delay: 4s;
+}
+
+@keyframes slideBottomLeft {
+    0% { left: -320px; bottom: 20px; transform: translateY(0); }
+    25% { left: 20px; bottom: 20px; transform: translateY(-10px); }
+    30% { left: 20px; bottom: 20px; transform: translateY(0); }
+    35% { left: 20px; bottom: 20px; transform: translateY(-5px); }
+    40% { left: 20px; bottom: 20px; transform: translateY(0); }
+    75% { left: 20px; bottom: 20px; transform: translateY(0); }
+    100% { left: -320px; bottom: 20px; transform: translateY(0); }
+}
+
+/* Bottom Right - Pulse and slide */
+.floating-ad.bottom-right {
+    bottom: 20px;
+    right: -350px;
+    animation-name: slideBottomRight;
+    animation-delay: 6s;
+}
+
+@keyframes slideBottomRight {
+    0% { right: -350px; bottom: 20px; transform: scale(1); }
+    25% { right: 20px; bottom: 20px; transform: scale(1.1); }
+    30% { right: 20px; bottom: 20px; transform: scale(1); }
+    35% { right: 20px; bottom: 20px; transform: scale(1.05); }
+    40% { right: 20px; bottom: 20px; transform: scale(1); }
+    75% { right: 20px; bottom: 20px; transform: scale(1); }
+    100% { right: -350px; bottom: 20px; transform: scale(1); }
+}
+
+/* Mobile optimizations for floating ads */
+@media (max-width: 768px) {
+    .floating-ad .ad-text {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .floating-ad.top-left,
+    .floating-ad.bottom-left {
+        left: -250px;
+    }
+    
+    .floating-ad.top-right,
+    .floating-ad.bottom-right {
+        right: -280px;
+    }
+    
+    @keyframes slideTopLeft {
+        0% { left: -250px; top: 15px; }
+        25% { left: 10px; top: 15px; }
+        50% { left: 10px; top: 15px; }
+        75% { left: 10px; top: 15px; }
+        100% { left: -250px; top: 15px; }
+    }
+    
+    @keyframes slideTopRight {
+        0% { right: -280px; top: 15px; }
+        25% { right: 10px; top: 15px; }
+        50% { right: 10px; top: 15px; }
+        75% { right: 10px; top: 15px; }
+        100% { right: -280px; top: 15px; }
+    }
+    
+    @keyframes slideBottomLeft {
+        0% { left: -250px; bottom: 15px; }
+        25% { left: 10px; bottom: 15px; }
+        75% { left: 10px; bottom: 15px; }
+        100% { left: -250px; bottom: 15px; }
+    }
+    
+    @keyframes slideBottomRight {
+        0% { right: -280px; bottom: 15px; }
+        25% { right: 10px; bottom: 15px; }
+        75% { right: 10px; bottom: 15px; }
+        100% { right: -280px; bottom: 15px; }
+    }
+}
+
+/* Very small screens - hide ads */
+@media (max-width: 480px) {
+    .floating-ads {
+        display: none;
+    }
+}
+
+/* ===== MOBİL OPTİMİZASYONLARI ===== */
+
+/* Mobil hero section */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 100vh;
+        height: auto;
+        padding: 2rem 0;
+    }
+    
+    .hero-background {
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .hero-image-container {
+        height: 100vh;
+        position: fixed;
+    }
+    
+    .hero-content {
+        height: auto;
+        min-height: 100vh;
+        padding-top: 80px; /* Navbar yüksekliği */
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    .hero-form-container {
+        margin-top: 2rem;
+    }
+    
+    .hero-form {
+        margin: 0 1rem;
+        padding: 1.5rem;
+    }
+    
+    .form-title {
+        font-size: 1.5rem;
+    }
+    
+    .form-subtitle {
+        font-size: 0.9rem;
+    }
+}
+
+/* Küçük mobil cihazlar */
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .hero-form {
+        margin: 0 0.5rem;
+        padding: 1rem;
+    }
+    
+    .form-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-icon-container i {
+        font-size: 2.5rem;
+    }
+    
+    .form-title {
+        font-size: 1.3rem;
+    }
+    
+    .form-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .dropdown .btn {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .dropdown-item {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .info-card {
+        padding: 1rem;
+    }
+    
+    .info-title {
+        font-size: 0.9rem;
+    }
+    
+    .info-text {
+        font-size: 0.8rem;
+    }
+    
+    .feature-item {
+        font-size: 0.7rem;
+        padding: 0.25rem;
+    }
+}
+
+/* Mobil touch optimizasyonları */
+@media (hover: none) and (pointer: coarse) {
+    .hero-buttons .btn:hover {
+        transform: none;
+    }
+    
+    .feature-card:hover {
+        transform: none;
+    }
+    
+    .dropdown-item:hover {
+        background: rgba(255, 215, 0, 0.1);
+    }
+    
+    /* Touch feedback */
+    .hero-buttons .btn:active,
+    .feature-card:active,
+    .dropdown-item:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+}
+
+/* Mobil performans optimizasyonları */
+@media (max-width: 768px) {
+    /* Mobilde daha az blur */
+    .hero-form.glass {
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Mobilde daha az shadow */
+    .feature-card {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .feature-card:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Mobilde daha az animasyon */
+    .fade-in-up {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Mobil erişilebilirlik */
+@media (max-width: 768px) {
+    /* Touch target boyutları */
+    .btn, .dropdown-item, .feature-item {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Mobilde daha büyük font */
+    .hero-section {
+        font-size: 16px;
+    }
+    
+    /* Mobilde daha iyi spacing */
+    .hero-content .row {
+        margin: 0;
+    }
+    
+    .hero-content .col-lg-6 {
+        padding: 1rem;
+    }
+}
+</style>
+
+<script>
+// HocTech floating ad interaction
+function showHocTechInfo() {
+    // Create modern notification
+    const notification = document.createElement('div');
+    notification.innerHTML = `
+        <div class="hoctech-notification">
+            <div class="notification-content">
+                <div class="notification-header">
+                    <i class="fas fa-code text-primary-gold me-2"></i>
+                    <strong>HocTech Yazılım</strong>
+                    <button class="notification-close" onclick="this.closest('.hoctech-notification').remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="notification-body">
+                    <p><i class="fas fa-check text-success me-2"></i>Profesyonel Web Uygulama Geliştirme</p>
+                    <p><i class="fas fa-check text-success me-2"></i>Mobil Uygulama Geliştirme</p>
+                    <p><i class="fas fa-check text-success me-2"></i>Eğitim Platformları</p>
+                    <p><i class="fas fa-check text-success me-2"></i>Kurumsal Yazılım Çözümleri</p>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-envelope me-1"></i>
+                            İletişim: info@hoctech.com
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add styles for notification
+    const style = document.createElement('style');
+    style.textContent = `
+        .hoctech-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%);
+            border: 2px solid var(--primary-gold);
+            border-radius: 15px;
+            padding: 0;
+            min-width: 350px;
+            max-width: 90vw;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            animation: notificationSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes notificationSlideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        .notification-content {
+            padding: 1.5rem;
+        }
+        
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .notification-header strong {
+            color: var(--primary-gold);
+            font-size: 1.1rem;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .notification-close:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--primary-gold);
+        }
+        
+        .notification-body p {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .notification-body small {
+            color: var(--text-muted);
+        }
+        
+        @media (max-width: 480px) {
+            .hoctech-notification {
+                min-width: 300px;
+                margin: 1rem;
+            }
+            
+            .notification-content {
+                padding: 1rem;
+            }
+        }
+    `;
+    
+    document.head.appendChild(style);
+    document.body.appendChild(notification);
+    
+    // Auto close after 5 seconds
+    setTimeout(() => {
+        if (notification.querySelector('.hoctech-notification')) {
+            notification.querySelector('.hoctech-notification').remove();
+        }
+    }, 5000);
+}
+</script>
+
+{% endblock %} 

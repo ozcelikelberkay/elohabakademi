@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Çıkmış Sorular - Elohab Bölümü{% endblock %}
+{% block body_class %}questions-page{% endblock %}
+
+{% block page_styles %}
+<style>
+    body.questions-page {
+        background: linear-gradient(135deg, rgba(10,10,10,0.25), rgba(26,26,26,0.55)),
+                    url('{{ url_for("static", filename="images/university.jpg") }}') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+    }
+    .questions-overlay-card { background-color: rgba(26,26,26,0.8) !important; border: 1px solid rgba(255,215,0,0.25); box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+    /* Eylem butonları için tutarlı düzen */
+    .question-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .question-actions .btn { height: 42px; line-height: 42px; padding: 0 14px; font-weight: 600; border-radius: 10px; }
+    .question-file { background-color: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.06); }
+    .filter-actions .btn { min-width: 140px; height: 42px; line-height: 42px; padding: 0 14px; font-weight: 600; border-radius: 10px; }
+</style>
+{% endblock %}
+
+{% block page_scripts %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item active">Çıkmış Sorular</li>
+                </ol>
+            </nav>
+
+            <h1 class="mb-4">Çıkmış Sorular</h1>
+
+            <div class="card mb-4 questions-overlay-card">
+                <div class="card-body">
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="course_id" class="form-label">Ders Seçin:</label>
+                            <select class="form-select" id="course_id" name="course_id">
+                                <option value="">Tüm Dersler</option>
+                                {% for course in courses %}
+                                <option value="{{ course.id }}" {% if selected_course == course.id %}selected{% endif %}>
+                                    {{ course.name }} ({{ course.grade }}. Sınıf)
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end filter-actions">
+                            <button type="submit" class="btn btn-success me-2">
+                                <i class="fas fa-filter me-1"></i>Filtrele
+                            </button>
+                            <a href="{{ url_for('questions') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Temizle
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% if questions %}
+                <div class="row">
+                    {% for question in questions %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-success">{{ question.question_text[:100] }}{% if question.question_text|length > 100 %}...{% endif %}</h6>
+                                <p class="text-muted small mb-2">{{ question.course.name }} • {{ question.course.grade }}. Sınıf • {{ question.year }}</p>
+                                {% if question.file_url %}
+                                <div class="d-flex align-items-center question-file rounded px-3 py-2 mb-3">
+                                    <i class="fas fa-file-alt me-2 text-info"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold">{{ question.file_name or 'Sınav Belgesi' }}</div>
+                                        {% if question.file_size %}
+                                        <small class="text-muted">{{ (question.file_size / 1024 / 1024) | round(2) }} MB</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <div class="question-actions">
+                                    {% if question.file_url %}
+                                    <a href="{{ url_for('download_file', file_type='questions', filename=question.file_url) }}" class="btn btn-success w-100">
+                                        <i class="fas fa-download me-1"></i>İndir
+                                    </a>
+                                    {% endif %}
+                                    {% if session.get('is_admin') or session.get('admin') %}
+                                    <form method="POST" action="{{ url_for('delete_question', question_id=question.id) }}" onsubmit="return confirm('Bu soruyu silmek istediğinize emin misiniz?');">
+                                        <button type="submit" class="btn btn-danger w-100">
+                                            <i class="fas fa-trash-alt me-1"></i>Sil
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    Seçilen kriterlere uygun soru bulunamadı.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

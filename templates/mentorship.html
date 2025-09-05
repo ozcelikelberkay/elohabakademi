@@ -1,0 +1,538 @@
+{% extends "base.html" %}
+
+{% block title %}Mentorluk - Elohab Akademi{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container-fluid px-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-users me-3"></i>
+                    Mentorluk Hizmeti
+                </h1>
+                <p class="lead mb-4">
+                    Deneyimli mentorlar ile birebir görüşme ve akademik destek alın
+                </p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-light">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active text-light" aria-current="page">Mentorluk</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mentorlar Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark">
+                <i class="fas fa-star me-3 text-success"></i>
+                Uzman Mentorlarımız
+            </h2>
+            <p class="lead text-muted">
+                Elektronik ve Haberleşme Mühendisliği alanında uzman mentorlarımızla tanışın
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Bedirhan Durmuş -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <div class="mentor-icon">
+                                <i class="fas fa-microchip fa-4x text-success"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-success mb-2">Bedirhan Durmuş</h4>
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Elektronik ve Web Geliştirme
+                        </p>
+                        <p class="text-muted mb-4">
+                            Elektronik devre tasarımı, web geliştirme ve haberleşme sistemleri konularında mentorluk yapmaktayım. 
+                            Öğrencilerin proje geliştirme ve teknik becerilerini geliştirmelerine yardımcı oluyorum.
+                        </p>
+                        <div class="d-grid">
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=bedirhan.durmus@elohab.edu.tr&su=Mentorluk%20Hizmeti%20Hakkında&body=Merhaba%20Bedirhan%20Hocam,%0A%0AMentorluk%20hizmetiniz%20hakkında%20bilgi%20almak%20istiyorum.%0A%0ASaygılarımla" target="_blank" class="btn btn-success">
+                                <i class="fas fa-envelope me-2"></i>İletişime Geç
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ömer Güzeller -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <div class="mentor-icon">
+                                <i class="fas fa-brain fa-4x text-success"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-success mb-2">Ömer Güzeller</h4>
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Haberleşme ve Yapay Zeka
+                        </p>
+                        <p class="text-muted mb-4">
+                            Haberleşme sistemleri, yapay zeka ve makine öğrenmesi konularında mentorluk yapmaktayım. 
+                            Öğrencilerin analitik düşünme becerilerini geliştirmelerine ve zorlu konuları anlamalarına yardımcı oluyorum.
+                        </p>
+                        <div class="d-grid">
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=omer.guzeller@elohab.edu.tr&su=Mentorluk%20Hizmeti%20Hakkında&body=Merhaba%20Ömer%20Hocam,%0A%0AMentorluk%20hizmetiniz%20hakkında%20bilgi%20almak%20istiyorum.%0A%0ASaygılarımla" target="_blank" class="btn btn-success">
+                                <i class="fas fa-envelope me-2"></i>İletişime Geç
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Berkay Özçelikel -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 text-center">
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <div class="mentor-icon">
+                                <i class="fas fa-robot fa-4x text-success"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-success mb-2">Berkay Özçelikel</h4>
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Otomasyon ve Mikroişlemciler
+                        </p>
+                        <p class="text-muted mb-4">
+                            Otomasyon sistemleri, mikroişlemciler ve gömülü sistemler konularında mentorluk yapmaktayım. 
+                            Öğrencilerin kodlama becerilerini ve donanım tasarım yeteneklerini geliştirmelerine yardımcı oluyorum.
+                        </p>
+                        <div class="d-grid">
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=berkay.ozcelikel@elohab.edu.tr&su=Mentorluk%20Hizmeti%20Hakkında&body=Merhaba%20Berkay%20Hocam,%0A%0AMentorluk%20hizmetiniz%20hakkında%20bilgi%20almak%20istiyorum.%0A%0ASaygılarımla" target="_blank" class="btn btn-success">
+                                <i class="fas fa-envelope me-2"></i>İletişime Geç
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mentorluk Süreci Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark">
+                <i class="fas fa-route me-3 text-success"></i>
+                Mentorluk Süreci
+            </h2>
+            <p class="lead text-muted">
+                Mentorluk hizmetinden nasıl yararlanacağınızı öğrenin
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card text-center feature-card h-100 transparent-card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-search fa-3x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">1. Mentor Seçimi</h5>
+                        <p class="small">
+                            İhtiyacınıza uygun mentoru seçin ve iletişime geçin
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center feature-card h-100 transparent-card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-calendar-alt fa-3x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">2. Randevu Alma</h5>
+                        <p class="small">
+                            Mentor ile uygun bir zaman diliminde randevu alın
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center feature-card h-100 transparent-card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-comments fa-3x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">3. Görüşme</h5>
+                        <p class="small">
+                            Mentor ile birebir görüşme yapın ve sorularınızı sorun
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center feature-card h-100 transparent-card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="fas fa-lightbulb fa-3x text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">4. Uygulama</h5>
+                        <p class="small">
+                            Mentorun önerilerini uygulayın ve gelişiminizi takip edin
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mentorluk Konuları Section -->
+<section class="mentorship-topics-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <div class="title-background">
+                <h2 class="display-5 fw-bold text-white">
+                    <i class="fas fa-book-open me-3 text-success"></i>
+                    Mentorluk Konuları
+                </h2>
+                <p class="lead text-white">
+                    Hangi konularda mentorluk alabileceğinizi keşfedin
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-calculator fa-3x text-white"></i>
+                        </div>
+                        <h5 class="text-white fw-bold">Matematik ve Fizik</h5>
+                        <ul class="list-unstyled text-white">
+                            <li>• Matematik I, II, III, IV</li>
+                            <li>• Fizik I, II</li>
+                            <li>• Lineer Cebir</li>
+                            <li>• Olasılık Teorisi</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-microchip fa-3x text-white"></i>
+                        </div>
+                        <h5 class="text-white fw-bold">Elektronik ve Devreler</h5>
+                        <ul class="list-unstyled text-white">
+                            <li>• Elektroniğe Giriş</li>
+                            <li>• Devre Analizi</li>
+                            <li>• Lojik Devreler</li>
+                            <li>• Sayısal Elektronik</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-broadcast-tower fa-3x text-white"></i>
+                        </div>
+                        <h5 class="text-white fw-bold">Haberleşme Sistemleri</h5>
+                        <ul class="list-unstyled text-white">
+                            <li>• Haberleşme Teorisi</li>
+                            <li>• Sayısal Haberleşme</li>
+                            <li>• Mikrodalga Tekniği</li>
+                            <li>• İşaret İşleme</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-code fa-3x text-white"></i>
+                        </div>
+                        <h5 class="text-white fw-bold">Programlama ve Yazılım</h5>
+                        <ul class="list-unstyled text-white">
+                            <li>• Bilgisayar Programlama</li>
+                            <li>• Mikroişlemciler</li>
+                            <li>• Algoritma Tasarımı</li>
+                            <li>• Yazılım Geliştirme</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-project-diagram fa-3x text-white"></i>
+                        </div>
+                        <h5 class="text-white fw-bold">Proje Geliştirme</h5>
+                        <ul class="list-unstyled text-white">
+                            <li>• Proje Planlama</li>
+                            <li>• Teknik Tasarım</li>
+                            <li>• Uygulama Geliştirme</li>
+                            <li>• Dokümantasyon</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-graduation-cap fa-3x text-white"></i>
+                        </div>
+                        <h5 class="text-white fw-bold">Kariyer Planlama</h5>
+                        <ul class="list-unstyled text-white">
+                            <li>• Staj ve İş Deneyimi</li>
+                            <li>• Kariyer Yolları</li>
+                            <li>• Sektör Bilgisi</li>
+                            <li>• Networking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- İletişim Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card feature-card transparent-card">
+                    <div class="card-body text-center p-5">
+                        <div class="mb-4">
+                            <i class="fas fa-envelope fa-3x text-white"></i>
+                        </div>
+                        <h2 class="text-white mb-4 fw-bold">Mentorluk Hizmetinden Yararlanın</h2>
+                        <p class="lead text-white mb-4">
+                            Mentorlarımızla iletişime geçerek akademik gelişiminizi hızlandırın. 
+                            Sorularınız, projeleriniz veya kariyer planlarınız için destek alın.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-home me-2"></i>Ana Sayfaya Dön
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.hero-section {
+    background: url('{{ url_for("static", filename="images/banner1.png") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    min-height: 60vh;
+    padding: 2rem 0;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 100px;
+    margin: 0 -2rem;
+    width: calc(100% + 4rem);
+}
+
+.hero-section h1 {
+    color: #ffffff !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.95);
+    letter-spacing: -0.3px;
+    margin-bottom: 1rem;
+}
+
+.hero-section p.lead {
+    color: #f8f9fa !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.hero-section .breadcrumb {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    margin: 0 auto;
+    width: fit-content;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.9rem;
+}
+
+.hero-section .breadcrumb-item {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+}
+
+.hero-section .breadcrumb-item a {
+    color: #FFD700 !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.hero-section .breadcrumb-item a:hover {
+    color: #FFA500 !important;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.hero-section .breadcrumb-item.active {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+/* Mentorluk Konuları Section Background */
+.mentorship-topics-section {
+    background: url('{{ url_for("static", filename="images/pervaneli.jpeg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    padding: 4rem 0;
+    margin: 0 -2rem;
+    width: calc(100% + 4rem);
+}
+
+.mentorship-topics-section h2,
+.mentorship-topics-section p {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+    font-weight: 600;
+}
+
+.mentorship-topics-section .card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+}
+
+.mentorship-topics-section .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Title background for better readability */
+.mentorship-topics-section .title-background {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: inline-block;
+    margin: 0 auto;
+}
+
+
+
+/* Transparent cards styling */
+.transparent-card {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.transparent-card:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.transparent-card .card-body {
+    color: #1a1a1a;
+}
+
+.transparent-card h4,
+.transparent-card h5,
+.transparent-card h2 {
+    color: #1a1a1a !important;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.transparent-card p {
+    color: #2d2d2d !important;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+.transparent-card .btn-outline-light {
+    border-color: rgba(26, 26, 26, 0.6);
+    color: #1a1a1a;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.transparent-card .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(26, 26, 26, 0.8);
+    color: #1a1a1a;
+}
+
+.mentor-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 50%;
+    border: 3px solid var(--primary-green);
+    transition: all 0.3s ease;
+}
+
+.mentor-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+}
+
+.mentor-icon i {
+    color: var(--primary-green);
+    transition: all 0.3s ease;
+}
+
+.mentor-icon:hover i {
+    color: var(--dark-green);
+}
+</style>
+{% endblock %} 

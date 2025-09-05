@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FFD700">
+    <title>{% block title %}ELOHAB AKADEMİ{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/ehmheadericon.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #B8860B;
+            --accent-gold: #FFA500;
+            --bitcoin-orange: #F7931A;
+            --dark-bg: #0A0A0A;
+            --card-bg: #1A1A1A;
+            --nav-bg: rgba(10, 10, 10, 0.98);
+            --text-primary: #FFFFFF;
+            --text-secondary: #E0E0E0;
+            --text-muted: #A0A0A0;
+            --success-green: #00D4AA;
+            --error-red: #FF6B6B;
+            --border-color: #333333;
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+            --shadow-gold: rgba(255, 215, 0, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1A1A1A 50%, #0F0F0F 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gold);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-gold);
+        }
+        
+        /* Navigation - EHM Professional Style */
+        .navbar {
+            background: linear-gradient(135deg, rgba(15, 15, 15, 0.95) 0%, rgba(25, 25, 25, 0.9) 100%);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+            padding: 0.875rem 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 900;
+            color: var(--primary-gold) !important;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-shadow: 0 0 25px var(--shadow-gold);
+            transition: all 0.3s ease;
+            position: relative;
+            margin-right: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        
+        .navbar-brand .brand-icon {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand:hover .brand-icon {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+        }
+        
+        .navbar-nav {
+            gap: 0.35rem;
+            margin-right: auto;
+        }
+        
+        .navbar-nav .nav-link {
+            color: var(--text-primary) !important;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.875rem 1rem !important;
+            margin: 0;
+            border-radius: 18px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            min-width: 110px;
+            height: 58px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            overflow: hidden;
+            line-height: 1.2;
+        }
+        
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .navbar-nav .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .navbar-nav .nav-link i {
+            font-size: 1.1rem;
+            color: var(--primary-gold);
+            transition: all 0.3s ease;
+            margin: 0;
+            flex-shrink: 0;
+        }
+        
+        .navbar-nav .nav-link span {
+            display: block;
+            text-align: center;
+            line-height: 1.1;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        
+        /* Special handling for two-line text */
+        .navbar-nav .nav-link .nav-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+        }
+        
+        .navbar-nav .nav-link .nav-text .line-1,
+        .navbar-nav .nav-link .nav-text .line-2 {
+            display: block;
+            line-height: 1;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-gold) !important;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 165, 0, 0.1) 100%);
+            border-color: var(--primary-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.25);
+        }
+        
+        .navbar-nav .nav-link:hover i {
+            transform: scale(1.1);
+            color: var(--accent-gold);
+        }
+        
+        .navbar-nav .nav-link.active {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.15) 100%);
+            border-color: var(--primary-gold);
+            color: var(--primary-gold) !important;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.2);
+        }
+        
+        /* Search Bar - Adjusted Position */
+        .search-container {
+            position: relative;
+            min-width: 250px;
+            max-width: 320px;
+            margin: 0 1rem 0 0.5rem;
+        }
+        
+        .search-container .form-control {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.15);
+            border-radius: 18px;
+            color: var(--text-primary);
+            padding: 1rem 1.75rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+            font-weight: 500;
+            height: 58px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-container .form-control:focus {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 100%);
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2), 0 8px 25px rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+            transform: scale(1.02);
+        }
+        
+        .search-container .form-control::placeholder {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .search-container .btn {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+            border: none;
+            border-radius: 14px;
+            color: var(--dark-bg);
+            font-weight: 700;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            right: 6px;
+            top: 6px;
+            height: 46px;
+            min-width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .search-container .btn:hover {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--primary-gold) 100%);
+            transform: scale(1.01);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        /* User Action Buttons - Larger Size */
+        .btn-login {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 18px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.875rem 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            min-width: 100px;
+            height: 58px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+            margin: 0 0.15rem;
+        }
+        
+        .btn-login:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 165, 0, 0.1) 100%);
+            border-color: var(--primary-gold);
+            color: var(--primary-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.25);
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+            border: none;
+            border-radius: 18px;
+            color: var(--dark-bg);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.875rem 1.75rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            min-width: 140px;
+            height: 58px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+            line-height: 1.2;
+        }
+        
+        .btn-register:hover {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--primary-gold) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* Dropdown Styling */
+        .dropdown-menu {
+            background: rgba(26, 26, 26, 0.98);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px var(--shadow-dark);
+            backdrop-filter: blur(30px);
+            padding: 1rem 0;
+            margin-top: 0.5rem;
+            min-width: 180px;
+        }
+        
+        .dropdown-item {
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.85rem;
+            position: relative;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--primary-gold);
+            transform: translateX(5px);
+        }
+        
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: var(--primary-gold);
+            transition: width 0.3s ease;
+        }
+        
+        .dropdown-item:hover::before {
+            width: 3px;
+        }
+        
+        /* Search Bar - Professional Style */
+        .search-container {
+            position: relative;
+            min-width: 200px;
+            max-width: 280px;
+            margin: 0 0.5rem;
+        }
+        
+        /* AGNO Calculator Bar - New */
+        .agno-calculator {
+            position: relative;
+            min-width: 150px;
+            max-width: 200px;
+            margin: 0 0.5rem;
+        }
+        
+        .agno-calculator .btn-agno {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+            border: none;
+            border-radius: 18px;
+            color: var(--dark-bg);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            text-decoration: none;
+            width: 100%;
+        }
+        
+        .agno-calculator .btn-agno:hover {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--primary-gold) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            color: var(--dark-bg);
+            text-decoration: none;
+        }
+        
+        .agno-calculator .btn-agno i {
+            font-size: 1rem;
+            color: var(--dark-bg);
+        }
+        
+        .search-container .form-control {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.15);
+            border-radius: 18px;
+            color: var(--text-primary);
+            padding: 1rem 1.75rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+            font-weight: 500;
+            height: 58px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-container .form-control:focus {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 100%);
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2), 0 8px 25px rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+            transform: scale(1.02);
+        }
+        
+        .search-container .form-control::placeholder {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+
+        
+        /* User Menu - Professional Style */
+        .user-menu {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.08) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            margin-left: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .user-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .user-menu:hover::before {
+            left: 100%;
+        }
+        
+        .user-menu:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 165, 0, 0.12) 100%);
+            border-color: var(--primary-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow-gold);
+        }
+        
+        .user-menu .nav-link {
+            color: var(--primary-gold) !important;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            color: var(--dark-bg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px var(--shadow-gold);
+        }
+        
+        .btn-outline-primary {
+            background: transparent;
+            border: 2px solid var(--primary-gold);
+            border-radius: 12px;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            color: var(--primary-gold);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px var(--shadow-gold);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-green) 0%, #00B894 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            color: var(--dark-bg);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 212, 170, 0.3);
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px var(--shadow-dark);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--shadow-dark);
+            border-color: var(--primary-gold);
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, #222222 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--accent-gold), var(--bitcoin-orange));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px var(--shadow-dark);
+            border-color: var(--primary-gold);
+        }
+        
+        /* Forms */
+        .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            padding: 0.875rem 1.25rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 3px var(--shadow-gold);
+            color: var(--text-primary);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Form Select Elements */
+        .form-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            padding: 0.875rem 1.25rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-select:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 3px var(--shadow-gold);
+            color: var(--text-primary);
+        }
+        
+        /* Fix dropdown option text color visibility */
+        .form-select option {
+            background-color: #1a1a1a !important;
+            color: #ffffff !important;
+            border: none;
+            padding: 8px;
+        }
+        
+        .form-select option:hover {
+            background-color: #333333 !important;
+            color: #FFD700 !important;
+        }
+        
+        .form-select option:checked {
+            background-color: #FFD700 !important;
+            color: #1a1a1a !important;
+        }
+        
+        .form-select option[value=""] {
+            color: #cccccc !important;
+            font-style: italic;
+        }
+        
+        /* Alerts */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            backdrop-filter: blur(10px);
+        }
+        
+        .alert-success {
+            background: rgba(0, 212, 170, 0.1);
+            color: var(--success-green);
+            border-left: 4px solid var(--success-green);
+        }
+        
+        .alert-danger {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--error-red);
+            border-left: 4px solid var(--error-red);
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(26, 26, 26, 0.9) 100%), url('{{ url_for("static", filename="images/fiber.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0 2rem;
+            margin-top: 0;
+        }
+        
+        .footer h5 {
+            color: var(--primary-gold);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .footer a:hover {
+            color: var(--primary-gold);
+            transform: translateX(5px);
+        }
+        
+        .footer ul li {
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Büyük ekranlar için footer optimizasyonları */
+        @media (min-width: 1400px) {
+            .footer {
+                padding: 4rem 0 3rem;
+            }
+            
+            .footer h5 {
+                font-size: 1.3rem;
+                margin-bottom: 2rem;
+            }
+            
+            .footer p, .footer li {
+                font-size: 1.05rem;
+            }
+            
+            .footer ul li {
+                margin-bottom: 1rem;
+            }
+            
+            .hoctech-logo {
+                width: 90px;
+                height: 90px;
+            }
+        }
+        
+        @media (min-width: 1600px) {
+            .footer {
+                padding: 5rem 0 4rem;
+            }
+            
+            .footer h5 {
+                font-size: 1.4rem;
+                margin-bottom: 2.5rem;
+            }
+            
+            .footer p, .footer li {
+                font-size: 1.1rem;
+            }
+            
+            .footer ul li {
+                margin-bottom: 1.25rem;
+            }
+            
+            .hoctech-logo {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        
+        @media (min-width: 1920px) {
+            .footer {
+                padding: 6rem 0 5rem;
+            }
+            
+            .footer h5 {
+                font-size: 1.5rem;
+                margin-bottom: 3rem;
+            }
+            
+            .footer p, .footer li {
+                font-size: 1.15rem;
+            }
+            
+            .footer ul li {
+                margin-bottom: 1.5rem;
+            }
+            
+            .hoctech-logo {
+                width: 110px;
+                height: 110px;
+            }
+        }
+        
+        /* HOCTECH Logo Styling */
+        .hoctech-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 12px;
+            vertical-align: middle;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+        
+        .hoctech-logo:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-container {
+                min-width: 100%;
+                margin: 1rem 0;
+            }
+            
+            .navbar-nav .nav-link {
+                padding: 0.5rem 1rem !important;
+                margin: 0.25rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+            }
+            
+            .user-menu {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        /* Custom Focus Styles */
+        .btn:focus,
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--shadow-gold);
+        }
+        
+        /* Glassmorphism Effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Responsive Design - EHM Style */
+        @media (max-width: 1200px) {
+            .search-container {
+                min-width: 180px;
+                max-width: 220px;
+                margin: 0 0.4rem;
+            }
+            
+            .agno-calculator {
+                min-width: 130px;
+                max-width: 160px;
+                margin: 0 0.4rem;
+            }
+            
+            .agno-calculator .btn-agno {
+                font-size: 0.7rem;
+                padding: 0.875rem 1rem;
+            }
+            
+            .navbar-nav .nav-link,
+            .btn-login,
+            .btn-register {
+                min-width: 100px;
+                height: 58px;
+                padding: 0.875rem 0.875rem !important;
+                font-size: 0.75rem;
+            }
+            
+            .navbar-nav .nav-link span {
+                font-size: 0.75rem;
+            }
+            
+            .navbar-brand .brand-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .search-container .form-control {
+                height: 58px;
+            }
+        }
+        
+        /* Büyük ekranlar için navbar optimizasyonları */
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1320px;
+            }
+            
+            .navbar-nav .nav-link,
+            .btn-login,
+            .btn-register {
+                min-width: 110px;
+                height: 60px;
+                padding: 1rem 1rem !important;
+                font-size: 0.8rem;
+            }
+            
+            .navbar-nav .nav-link span {
+                font-size: 0.8rem;
+            }
+            
+            .search-container {
+                min-width: 220px;
+                max-width: 280px;
+                margin: 0 0.6rem;
+            }
+            
+            .agno-calculator {
+                min-width: 160px;
+                max-width: 200px;
+                margin: 0 0.6rem;
+            }
+            
+            .search-container .form-control {
+                height: 60px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1400px;
+            }
+            
+            .navbar-nav .nav-link,
+            .btn-login,
+            .btn-register {
+                min-width: 120px;
+                height: 62px;
+                padding: 1rem 1.25rem !important;
+                font-size: 0.85rem;
+            }
+            
+            .navbar-nav .nav-link span {
+                font-size: 0.85rem;
+            }
+            
+            .search-container {
+                min-width: 250px;
+                max-width: 300px;
+                margin: 0 0.8rem;
+            }
+            
+            .agno-calculator {
+                min-width: 180px;
+                max-width: 220px;
+                margin: 0 0.8rem;
+            }
+            
+            .search-container .form-control {
+                height: 62px;
+                font-size: 1.05rem;
+            }
+        }
+        
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1600px;
+            }
+            
+            .navbar-nav .nav-link,
+            .btn-login,
+            .btn-register {
+                min-width: 130px;
+                height: 65px;
+                padding: 1.125rem 1.5rem !important;
+                font-size: 0.9rem;
+            }
+            
+            .navbar-nav .nav-link span {
+                font-size: 0.9rem;
+            }
+            
+            .search-container {
+                min-width: 280px;
+                max-width: 320px;
+                margin: 0 1rem;
+            }
+            
+            .agno-calculator {
+                min-width: 200px;
+                max-width: 240px;
+                margin: 0 1rem;
+            }
+            
+            .search-container .form-control {
+                height: 65px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .navbar-nav {
+                gap: 0.3rem;
+            }
+            
+            .navbar-nav .nav-link,
+            .btn-login,
+            .btn-register {
+                min-width: 90px;
+                height: 58px;
+                padding: 0.875rem 0.75rem !important;
+                font-size: 0.7rem;
+                letter-spacing: 0.25px;
+            }
+            
+            .navbar-nav .nav-link span {
+                font-size: 0.65rem;
+            }
+            
+            .navbar-nav .nav-link i {
+                font-size: 0.95rem;
+            }
+            
+            /* Hide search and AGNO calculator on medium screens */
+            .navbar-nav.mx-auto {
+                display: none !important;
+            }
+            
+            .navbar-brand .brand-icon {
+                width: 48px;
+                height: 48px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1.3rem;
+                margin-right: 2rem;
+            }
+            
+            .navbar-brand .brand-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .search-container {
+                min-width: 100%;
+                margin: 1rem 0;
+                order: 3;
+            }
+            
+            .navbar-nav .nav-link,
+            .btn-login,
+            .btn-register {
+                min-width: 100px;
+                height: 52px;
+                padding: 0.75rem 1rem !important;
+                font-size: 0.7rem;
+                margin: 0.25rem 0;
+            }
+            
+            .navbar-nav .nav-link span {
+                font-size: 0.65rem;
+            }
+            
+            .navbar-nav .nav-link i {
+                font-size: 0.95rem;
+            }
+            
+            .search-container .form-control {
+                height: 52px;
+            }
+            
+            .navbar-nav {
+                gap: 0.25rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.2rem;
+                letter-spacing: 1.5px;
+            }
+            
+            .navbar-brand .brand-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .navbar-nav .nav-link,
+            .btn-login,
+            .btn-register {
+                min-width: 90px;
+                height: 48px;
+                font-size: 0.65rem;
+                padding: 0.625rem 0.875rem !important;
+            }
+            
+            .navbar-nav .nav-link span {
+                font-size: 0.6rem;
+            }
+            
+            .navbar-nav .nav-link i {
+                font-size: 0.9rem;
+            }
+            
+            .search-container .form-control {
+                height: 48px;
+            }
+        }
+        
+        /* ===== MOBİL OPTİMİZASYONLARI ===== */
+        
+        /* Mobil için özel düzenlemeler */
+        @media (max-width: 768px) {
+            /* Mobil navbar optimizasyonu */
+            .navbar {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+                margin-right: 1rem;
+            }
+            
+            .navbar-brand .brand-icon {
+                width: 35px;
+                height: 35px;
+            }
+            
+            /* Mobil menü optimizasyonu */
+            .navbar-collapse {
+                background: rgba(10, 10, 10, 0.95);
+                border-radius: 10px;
+                margin-top: 1rem;
+                padding: 1rem;
+                backdrop-filter: blur(20px);
+            }
+            
+            .navbar-nav .nav-link {
+                min-width: auto;
+                height: auto;
+                padding: 0.75rem 1rem !important;
+                margin: 0.25rem 0;
+                border-radius: 8px;
+                font-size: 0.9rem;
+            }
+            
+            .navbar-nav .nav-link span {
+                font-size: 0.8rem;
+            }
+            
+            /* Mobil search optimizasyonu */
+            .search-container {
+                min-width: 100%;
+                margin: 1rem 0;
+            }
+            
+            .search-container .form-control {
+                height: 50px;
+                font-size: 16px; /* iOS zoom'u engeller */
+            }
+            
+            /* Mobil dropdown optimizasyonu */
+            .dropdown-menu {
+                background: rgba(26, 26, 26, 0.95);
+                border: 1px solid rgba(255, 215, 0, 0.2);
+                backdrop-filter: blur(20px);
+            }
+            
+            .dropdown-item {
+                color: var(--text-primary);
+                padding: 0.75rem 1rem;
+            }
+            
+            .dropdown-item:hover {
+                background: rgba(255, 215, 0, 0.1);
+                color: var(--primary-gold);
+            }
+        }
+        
+        /* Küçük mobil cihazlar için */
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .navbar-brand {
+                font-size: 0.9rem;
+                letter-spacing: 0.5px;
+            }
+            
+            .navbar-brand .brand-icon {
+                width: 30px;
+                height: 30px;
+            }
+            
+            /* Mobil buton optimizasyonu */
+            .btn {
+                min-height: 44px; /* iOS touch target */
+                font-size: 16px;
+            }
+            
+            /* Mobil card optimizasyonu */
+            .card {
+                margin-bottom: 1rem;
+                border-radius: 12px;
+            }
+            
+            .card-body {
+                padding: 1rem;
+            }
+            
+            /* Mobil form optimizasyonu */
+            .form-control, .form-select {
+                height: 50px;
+                font-size: 16px;
+                border-radius: 8px;
+            }
+            
+            /* Mobil footer optimizasyonu */
+            .footer {
+                padding: 2rem 0 1rem 0;
+            }
+            
+            .footer h5 {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .footer p, .footer li {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Mobil touch optimizasyonları */
+        @media (hover: none) and (pointer: coarse) {
+            /* Touch cihazlar için hover efektlerini kaldır */
+            .navbar-nav .nav-link:hover {
+                transform: none;
+            }
+            
+            .btn:hover {
+                transform: none;
+            }
+            
+            .card:hover {
+                transform: none;
+            }
+            
+            /* Touch feedback */
+            .navbar-nav .nav-link:active,
+            .btn:active,
+            .card:active {
+                transform: scale(0.98);
+                transition: transform 0.1s ease;
+            }
+        }
+        
+        /* Mobil performans optimizasyonları */
+        @media (max-width: 768px) {
+            /* Animasyonları mobilde azalt */
+            .fade-in-up {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+            
+            /* Mobilde daha az blur */
+            .navbar, .navbar-collapse, .dropdown-menu {
+                backdrop-filter: blur(10px);
+            }
+            
+            /* Mobilde daha az shadow */
+            .navbar {
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            }
+        }
+        
+        /* Mobil erişilebilirlik */
+        @media (max-width: 768px) {
+            /* Touch target boyutları */
+            .nav-link, .btn, .dropdown-item {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+            
+            /* Mobilde daha büyük font */
+            body {
+                font-size: 16px;
+            }
+            
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.3rem; }
+            h4 { font-size: 1.1rem; }
+            h5 { font-size: 1rem; }
+        }
+    </style>
+    {% block page_styles %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container px-1">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/ehmheadericon.png') }}" alt="EHM Logo" class="brand-icon">
+                <span>EHM AKADEMİ</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Mobile Search -->
+                <div class="d-lg-none w-100 mb-3">
+                    <form class="d-flex mb-2" method="GET" action="{{ url_for('search') }}">
+                        <div class="input-group search-container">
+                            <input class="form-control" type="search" name="q" placeholder="Ders notu, soru veya proje ara..." 
+                                   aria-label="Search" value="{{ request.args.get('q', '') }}">
+                            <button class="btn" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!-- Mobile AGNO Calculator -->
+                    <a href="{{ url_for('agno_calculator') }}" class="btn btn-warning w-100">
+                        <i class="fas fa-calculator me-2"></i>AGNO HESAPLA
+                    </a>
+                </div>
+                
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-book"></i>
+                            <span>DERSLER</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('grade_page', grade=1) }}">
+                                <i class="fas fa-star me-2 text-warning"></i>1. Sınıf
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('grade_page', grade=2) }}">
+                                <i class="fas fa-star me-2 text-warning"></i>2. Sınıf
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('grade_page', grade=3) }}">
+                                <i class="fas fa-star me-2 text-warning"></i>3. Sınıf
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('grade_page', grade=4) }}">
+                                <i class="fas fa-star me-2 text-warning"></i>4. Sınıf
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('notes') }}">
+                                <i class="fas fa-sticky-note me-2"></i>Tüm Ders Notları
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('questions') }}">
+                                <i class="fas fa-question-circle me-2"></i>Tüm Çıkmış Sorular
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('projects') }}">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>PROJELER</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mentorship') }}">
+                            <i class="fas fa-users"></i>
+                            <span>MENTORLUK</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about') }}">
+                            <i class="fas fa-info-circle"></i>
+                            <span>HAKKIMIZDA</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('course_forum') }}">
+                            <i class="fas fa-comments"></i>
+                            <span>DERS FORUMU</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Desktop Search & AGNO Calculator -->
+                <div class="navbar-nav mx-auto d-none d-lg-flex align-items-center gap-2">
+                    <!-- Search Bar -->
+                    <form class="d-flex" method="GET" action="{{ url_for('search') }}">
+                        <div class="input-group search-container">
+                            <input class="form-control" type="search" name="q" placeholder="Ders notu, soru ara..." 
+                                   aria-label="Search" value="{{ request.args.get('q', '') }}">
+                            <button class="btn" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- AGNO Calculator -->
+                    <div class="agno-calculator">
+                        <a href="{{ url_for('agno_calculator') }}" class="btn-agno">
+                            <i class="fas fa-calculator"></i>
+                            <span>AGNO HESAPLA</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <ul class="navbar-nav">
+                    {% if session.get('user_id') %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle user-menu" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>{{ session.get('username', 'Kullanıcı') }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}">
+                                    <i class="fas fa-id-card me-1"></i>Profilim
+                                </a></li>
+                                {% if session.get('is_admin') %}
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">
+                                        <i class="fas fa-cog me-1"></i>Admin Panel
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                {% endif %}
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Çıkış
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link btn-login" href="{{ url_for('login') }}">
+                                <i class="fas fa-sign-in-alt me-1"></i>Giriş
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content with Top Margin -->
+    <main style="margin-top: 100px;">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+                <div class="container mt-4">
+                {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show fade-in-up" role="alert">
+                        <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-graduation-cap me-2"></i>EHM AKADEMİ</h5>
+                    <p class="text-muted">Elohab Akademi, HOCTECH kuruluşu tarafından Elektronik ve Haberleşme Mühendisliği öğrencilerinin akademik başarılarını artırmak, bilgi paylaşımını teşvik etmek ve mühendislik eğitiminde kaliteyi yükseltmek amacıyla geliştirilmiştir.</p>
+                    <div class="mt-3">
+                        <a href="#" class="me-3 text-muted"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="me-3 text-muted"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="me-3 text-muted"><i class="fab fa-github fa-lg"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5>Hızlı Linkler</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('grade_page', grade=1) }}">1. Sınıf Dersleri</a></li>
+                        <li><a href="{{ url_for('grade_page', grade=2) }}">2. Sınıf Dersleri</a></li>
+                        <li><a href="{{ url_for('grade_page', grade=3) }}">3. Sınıf Dersleri</a></li>
+                        <li><a href="{{ url_for('grade_page', grade=4) }}">4. Sınıf Dersleri</a></li>
+                        <li><a href="{{ url_for('projects') }}">Projeler</a></li>
+                        <li><a href="{{ url_for('mentorship') }}">Mentorluk</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: var(--border-color);">
+            <div class="text-center">
+                <p class="text-muted">&copy; 2025 EHM AKADEMİ PLATFORMU. Tüm hakları saklıdır.</p>
+                <div class="mt-3 mb-2">
+                    <img src="{{ url_for('static', filename='images/HOCTECH_KURUMSAL_LOGO.jpg') }}" 
+                         alt="HOCTECH Logo" 
+                         class="hoctech-logo me-2">
+                    <span class="text-muted">Bu akademi  <strong class="text-primary-gold">HOCTECH</strong> tarafından geliştirilmiştir</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(10, 10, 10, 0.6)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                navbar.style.background = 'rgba(10, 10, 10, 0.3)';
+                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.2)';
+            }
+        });
+
+        // Add fade-in animation to elements (mobilde devre dışı)
+        if (window.innerWidth > 768) {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-up');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all cards and sections
+            document.addEventListener('DOMContentLoaded', function() {
+                const elements = document.querySelectorAll('.card, .feature-card, section');
+                elements.forEach(el => observer.observe(el));
+            });
+        }
+        
+        // Mobil optimizasyonları
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobil cihaz kontrolü
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                // Mobilde navbar'ı otomatik kapat
+                const navbarToggler = document.querySelector('.navbar-toggler');
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                
+                if (navbarToggler && navbarCollapse) {
+                    // Menü linklerine tıklandığında menüyü kapat
+                    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+                    navLinks.forEach(link => {
+                        link.addEventListener('click', () => {
+                            if (navbarCollapse.classList.contains('show')) {
+                                navbarToggler.click();
+                            }
+                        });
+                    });
+                }
+                
+                // Mobilde touch feedback
+                const touchElements = document.querySelectorAll('.btn, .nav-link, .card');
+                touchElements.forEach(element => {
+                    element.addEventListener('touchstart', function() {
+                        this.style.transform = 'scale(0.98)';
+                    });
+                    
+                    element.addEventListener('touchend', function() {
+                        this.style.transform = 'scale(1)';
+                    });
+                });
+            }
+            
+            // Responsive navbar background
+            function updateNavbarBackground() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.style.background = isMobile ? 'rgba(10, 10, 10, 0.95)' : 'rgba(10, 10, 10, 0.6)';
+                } else {
+                    navbar.style.background = isMobile ? 'rgba(10, 10, 10, 0.98)' : 'rgba(10, 10, 10, 0.3)';
+                }
+            }
+            
+            window.addEventListener('scroll', updateNavbarBackground);
+            updateNavbarBackground();
+        });
+    </script>
+    {% block page_scripts %}{% endblock %}
+</body>
+</html> 

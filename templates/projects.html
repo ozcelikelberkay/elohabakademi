@@ -1,0 +1,564 @@
+{% extends "base.html" %}
+
+{% block title %}Projeler - Elohab Bölümü{% endblock %}
+
+<!-- PDF.js kütüphanesi -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    // PDF.js worker'ı ayarla
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
+
+{% block content %}
+<style>
+.projects-background {
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.7) 0%, rgba(26, 26, 26, 0.7) 100%), url('{{ url_for("static", filename="images/satellite.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+/* Buton renk düzenlemeleri */
+.projects-background .card {
+    background: rgba(26, 26, 26, 0.9) !important;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.projects-background .card .card-body {
+    color: #ffffff !important;
+}
+
+.projects-background .card-title {
+    color: #FFD700 !important;
+    font-weight: 700;
+}
+
+.projects-background .btn-warning {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border: none;
+    color: #1a1a1a !important;
+    font-weight: 600;
+    text-shadow: none;
+}
+
+.projects-background .btn-warning:hover {
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
+.projects-background .btn-outline-secondary {
+    background: rgba(108, 117, 125, 0.9);
+    border: 2px solid #6c757d;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+.projects-background .btn-outline-secondary:hover {
+    background: #6c757d;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+}
+
+.projects-background .alert-info {
+    background: rgba(13, 202, 240, 0.15);
+    border: 1px solid rgba(13, 202, 240, 0.3);
+    color: #0dcaf0 !important;
+    font-weight: 500;
+}
+
+.projects-background .form-select,
+.projects-background .form-control {
+    background: rgba(26, 26, 26, 0.9);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    color: #ffffff;
+}
+
+.projects-background .form-select:focus,
+.projects-background .form-control:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25);
+}
+
+.projects-background h1,
+.projects-background h2,
+.projects-background h3 {
+    color: #fff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.projects-background .breadcrumb {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.projects-background .breadcrumb-item a {
+    color: #FFD700 !important;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.projects-background .breadcrumb-item.active {
+    color: #fff !important;
+}
+
+/* Kategori filtreleme stilleri */
+.category-filter {
+    background: rgba(26, 26, 26, 0.9);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.category-filter .card-title {
+    color: #FFD700 !important;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Form elemanları için tutarlı boyutlandırma */
+.category-filter .form-group {
+    margin-bottom: 1rem;
+}
+
+.category-filter .row.g-3 > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.category-filter .row.g-3 > div > label {
+    margin-bottom: 0.5rem;
+}
+
+.category-filter .row.g-3 > div > select,
+.category-filter .row.g-3 > div > input {
+    flex: 1;
+}
+
+/* Kategori badge'leri */
+.category-badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.category-elektronik {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+}
+
+.category-mikroislemci {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+    color: white;
+}
+
+.category-makine_ogrenmesi {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: #1a1a1a;
+}
+
+.category-otomasyon {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+}
+
+/* Bitirme projeleri mentorluk hizmeti stilleri */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+}
+
+.mentorship-example {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+.mentorship-example h6 {
+    color: #FFD700;
+    font-size: 0.9rem;
+}
+
+.mentorship-example p {
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.mentorship-example small {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+}
+
+/* Arama input stilleri */
+.category-filter .form-control,
+.category-filter .form-select {
+    background: rgba(26, 26, 26, 0.9);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    color: #ffffff;
+    border-radius: 10px;
+    height: 38px; /* Sabit yükseklik */
+    line-height: 1.5;
+    padding: 0.375rem 0.75rem;
+}
+
+.category-filter .form-control:focus,
+.category-filter .form-select:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25);
+}
+
+.category-filter .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Form label'ları için tutarlı stil */
+.category-filter .form-label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+/* Butonlar için tutarlı boyutlandırma */
+.category-filter .btn {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.category-filter .btn-warning {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border: none;
+    color: #1a1a1a;
+    min-width: 80px;
+}
+
+.category-filter .btn-outline-secondary {
+    background: rgba(108, 117, 125, 0.9);
+    border: 2px solid #6c757d;
+    color: #fff;
+    min-width: 80px;
+}
+</style>
+
+<div class="projects-background">
+    <div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item active">Projeler</li>
+                </ol>
+            </nav>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Projeler</h1>
+                {% if session.user_id %}
+                <a href="{{ url_for('add_project') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Yeni Proje Ekle
+                </a>
+                {% endif %}
+            </div>
+            
+
+            
+            <!-- Projeler -->
+            {% if projects %}
+                <div class="row">
+                    {% for project in projects %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-warning">{{ project.title }}</h5>
+                                <p class="card-text">{{ project.description[:150] }}{% if project.description|length > 150 %}...{% endif %}</p>
+                                
+                                <!-- Dosya bilgileri -->
+                                {% if project.file_path %}
+                                <div class="alert alert-success py-2 mb-2">
+                                    <i class="fas fa-file me-2"></i>
+                                    <strong>{{ project.file_name or 'Proje Dosyası' }}</strong>
+                                    {% if project.file_type %}
+                                    <span class="badge bg-secondary ms-2">{{ project.file_type }}</span>
+                                    {% endif %}
+                                    {% if project.file_size %}
+                                    <small class="text-muted ms-2">({{ (project.file_size / 1024 / 1024) | round(2) }} MB)</small>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Arşiv bilgileri -->
+                                {% if project.archive_info %}
+                                {% set archive_data = project.archive_info | from_json %}
+                                <div class="alert alert-info py-2 mb-2">
+                                    <i class="fas fa-archive me-2"></i>
+                                    <strong>Arşiv:</strong> {{ archive_data.file_count }} dosya
+                                    <small class="text-muted ms-2">({{ (archive_data.total_size / 1024 / 1024) | round(2) }} MB)</small>
+                                </div>
+                                {% endif %}
+                                {% endif %}
+                                
+                                <div class="mb-3">
+                                    {% if project.file_path %}
+                                        <span class="badge bg-success">Dosya Mevcut</span>
+                                    {% endif %}
+                                    {% if project.category %}
+                                        <span class="badge category-badge category-{{ project.category }}">
+                                            {% if project.category == 'elektronik' %}Elektronik Devre
+                                            {% elif project.category == 'mikroislemci' %}Mikroişlemci
+                                            {% elif project.category == 'makine_ogrenmesi' %}Makine Öğrenmesi
+                                            {% elif project.category == 'otomasyon' %}Otomasyon
+                                            {% else %}{{ project.category }}{% endif %}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="btn-group w-100" role="group">
+                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#projectModal{{ project.id }}">
+                                        <i class="fas fa-eye me-1"></i>Detay
+                                    </button>
+                                    
+                                    {% if project.file_url %}
+                                    <a href="{{ url_for('download_file', file_type='projects', filename=project.file_url) }}" 
+                                       class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-download me-1"></i>İndir
+                                    </a>
+                                    {% endif %}
+                                    
+                                    {% if session.user_id == project.uploaded_by or session.is_admin %}
+                                    <a href="{{ url_for('edit_project', project_id=project.id) }}" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Düzenle
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" 
+                                            onclick="deleteProject({{ project.id }})">
+                                        <i class="fas fa-trash me-1"></i>Sil
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="projectModal{{ project.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ project.title }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        {% if project.file_path %}
+                                            <span class="badge bg-success me-2">Dosya Mevcut</span>
+                                        {% endif %}
+                                        {% if project.category %}
+                                            <span class="badge category-badge category-{{ project.category }} me-2">
+                                                {% if project.category == 'elektronik' %}Elektronik Devre
+                                                {% elif project.category == 'mikroislemci' %}Mikroişlemci
+                                                {% elif project.category == 'makine_ogrenmesi' %}Makine Öğrenmesi
+                                                {% elif project.category == 'otomasyon' %}Otomasyon
+                                                {% else %}{{ project.category }}{% endif %}
+                                            </span>
+                                        {% endif %}
+                                        {% if project.user %}
+                                        <span class="badge bg-info">{{ project.user.username }}</span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="project-content">
+                                        <h6 class="text-primary">Proje Açıklaması:</h6>
+                                        <p>{{ project.description }}</p>
+                                        
+                                        {% if project.file_path %}
+                                            <div class="mt-3">
+                                                <h6 class="text-success">Proje Dosyası:</h6>
+                                                <div class="alert alert-info">
+                                                    <i class="fas fa-file me-2"></i>
+                                                    <strong>{{ project.file_name or 'Proje Dosyası' }}</strong>
+                                                    {% if project.file_type %}
+                                                    <span class="badge bg-secondary ms-2">{{ project.file_type }}</span>
+                                                    {% endif %}
+                                                    {% if project.file_size %}
+                                                    <small class="text-muted ms-2">({{ (project.file_size / 1024 / 1024) | round(2) }} MB)</small>
+                                                    {% endif %}
+                                                </div>
+                                                
+                                                {% if project.archive_info %}
+                                                {% set archive_data = project.archive_info | from_json %}
+                                                <div class="alert alert-warning">
+                                                    <h6><i class="fas fa-archive me-2"></i>Arşiv Bilgileri:</h6>
+                                                    <ul class="list-unstyled mb-0">
+                                                        <li><strong>Dosya Sayısı:</strong> {{ archive_data.file_count }}</li>
+                                                        <li><strong>Toplam Boyut:</strong> {{ (archive_data.total_size / 1024 / 1024) | round(2) }} MB</li>
+                                                        {% if archive_data.files %}
+                                                        <li><strong>İçerik:</strong></li>
+                                                        <ul>
+                                                            {% for file in archive_data.files[:10] %}
+                                                            <li><small>{{ file }}</small></li>
+                                                            {% endfor %}
+                                                            {% if archive_data.files | length > 10 %}
+                                                            <li><small>... ve {{ archive_data.files | length - 10 }} dosya daha</small></li>
+                                                            {% endif %}
+                                                        </ul>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                    {% if project.file_path %}
+                                        <a href="{{ url_for('download_file', file_type='projects', filename=project.file_url) }}" 
+                                           class="btn btn-success">
+                                            <i class="fas fa-download me-1"></i>Dosyayı İndir
+                                        </a>
+                                        
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                
+            {% endif %}
+            
+            <!-- Kategori Bazlı Proje Önerileri -->
+            <div class="mt-5">
+                <h3>Kategori Bazlı Proje Önerileri</h3>
+                <div class="row">
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-microchip fa-2x text-primary"></i>
+                                </div>
+                                <h5 class="text-primary">Elektronik Devre Projeleri</h5>
+                                <ul class="list-unstyled">
+                                    <li>LED Kontrol Sistemi</li>
+                                    <li>Güç Elektroniği Devresi</li>
+                                    <li>Amplifikatör Tasarımı</li>
+                                    <li>Osilatör Devreleri</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-microchip fa-2x text-success"></i>
+                                </div>
+                                <h5 class="text-success">Mikroişlemci Projeleri</h5>
+                                <ul class="list-unstyled">
+                                    <li>Arduino LED Kontrolü</li>
+                                    <li>Raspberry Pi Sensör Ağı</li>
+                                    <li>8051 Tabanlı Sistem</li>
+                                    <li>STM32 Uygulamaları</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-brain fa-2x text-warning"></i>
+                                </div>
+                                <h5 class="text-warning">Makine Öğrenmesi & Derin Öğrenme</h5>
+                                <ul class="list-unstyled">
+                                    <li>Yüz Tanıma Sistemi</li>
+                                    <li>Nesne Tespiti</li>
+                                    <li>Ses Sınıflandırma</li>
+                                    <li>Metin Analizi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-robot fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="text-danger">Otomasyon Projeleri</h5>
+                                <ul class="list-unstyled">
+                                    <li>Akıllı Ev Sistemi</li>
+                                    <li>Endüstriyel Kontrol</li>
+                                    <li>IoT Sensör Ağı</li>
+                                    <li>Uzaktan Kontrol</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bitirme Projeleri Mentorluk Hizmeti -->
+            <div class="mt-5">
+                <div class="card border-0 bg-gradient-primary text-white">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h3 class="mb-3">
+                                    <i class="fas fa-graduation-cap me-2"></i>Bitirme Projeleri Mentorluk Hizmeti
+                                </h3>
+                                <p class="mb-3">
+                                    Özel isteğe bağlı olarak projeler yapılacaktır. Deneyimli mentorlarımız ile birlikte 
+                                    bitirme projenizi planlayın ve geliştirin.
+                                </p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark">Özel Proje Tasarımı</span>
+                                    <span class="badge bg-light text-dark">Teknik Danışmanlık</span>
+                                    <span class="badge bg-light text-dark">Kod Geliştirme</span>
+                                    <span class="badge bg-light text-dark">Dokümantasyon</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="mentorship-example mb-3">
+                                    <h6 class="text-warning fw-bold">Örnek Proje:</h6>
+                                    <p class="mb-0 fw-bold">"Cam Kusur Tespiti Fabrika"</p>
+                                    <small class="text-light">Endüstriyel Görüntü İşleme</small>
+                                </div>
+                                <a href="{{ url_for('mentorship') }}" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-users me-2"></i>Mentorluk Al
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+// Proje silme
+function deleteProject(projectId) {
+    if (confirm('Bu projeyi silmek istediğinizden emin misiniz?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/projects/delete/${projectId}`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+
+</script>
+{% endblock %} 

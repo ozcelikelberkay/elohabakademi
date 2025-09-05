@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block title %}Hakkımızda - Elohab Akademi{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-info-circle me-3"></i>
+                    Hakkımızda
+                </h1>
+                <p class="lead mb-4">
+                    Elohab Akademi'nin hikayesi ve misyonu hakkında detaylı bilgi
+                </p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-light">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active text-light" aria-current="page">Hakkımızda</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ana İçerik -->
+<section class="main-content-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- Misyon -->
+                <div class="card feature-card mb-5">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-bullseye fa-3x text-success"></i>
+                        </div>
+                        <h2 class="text-center text-success mb-4">Misyonumuz</h2>
+                        <p class="lead text-center text-muted mb-4">
+                            Elektronik ve Haberleşme Mühendisliği öğrencilerinin akademik başarılarını 
+                            artırmak ve bilgi paylaşımını teşvik etmek
+                        </p>
+                        <p class="text-muted">
+                            Elohab Akademi, öğrencilerin eğitim süreçlerinde karşılaştıkları zorlukları 
+                            aşmalarına yardımcı olmak amacıyla kurulmuştur. Platformumuz, sadece bilgi 
+                            aktarımı değil, aynı zamanda öğrenciler arasında güçlü bir topluluk ruhu 
+                            oluşturmayı hedeflemektedir.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Vizyon -->
+                <div class="card feature-card mb-5">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-eye fa-3x text-success"></i>
+                        </div>
+                        <h2 class="text-center text-success mb-4">Vizyonumuz</h2>
+                        <p class="lead text-center text-muted mb-4">
+                            Türkiye'nin en kapsamlı ve güvenilir elektronik mühendisliği eğitim platformu olmak
+                        </p>
+                        <p class="text-muted">
+                            Gelecekte, platformumuzu sadece Elektronik ve Haberleşme Mühendisliği ile 
+                            sınırlı tutmayıp, diğer mühendislik dallarını da kapsayacak şekilde genişletmeyi 
+                            planlıyoruz. Amacımız, tüm mühendislik öğrencilerine kaliteli eğitim kaynakları 
+                            sunmak ve akademik mükemmelliği desteklemektir.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Değerlerimiz -->
+                <div class="card feature-card mb-5">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-heart fa-3x text-success"></i>
+                        </div>
+                        <h2 class="text-center text-success mb-4">Değerlerimiz</h2>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="text-center p-3">
+                                    <i class="fas fa-shield-alt fa-2x text-success mb-3"></i>
+                                    <h5 class="text-success">Güvenilirlik</h5>
+                                    <p class="text-muted small">
+                                        Sunduğumuz tüm içeriklerin doğruluğunu ve güncelliğini garanti ediyoruz
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center p-3">
+                                    <i class="fas fa-users fa-2x text-success mb-3"></i>
+                                    <h5 class="text-success">Topluluk</h5>
+                                    <p class="text-muted small">
+                                        Öğrenciler arasında güçlü bağlar kurmayı ve bilgi paylaşımını destekliyoruz
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center p-3">
+                                    <i class="fas fa-lightbulb fa-2x text-success mb-3"></i>
+                                    <h5 class="text-success">İnovasyon</h5>
+                                    <p class="text-muted small">
+                                        Sürekli gelişim ve yenilikçi eğitim yöntemleri kullanıyoruz
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center p-3">
+                                    <i class="fas fa-handshake fa-2x text-success mb-3"></i>
+                                    <h5 class="text-success">Yardımlaşma</h5>
+                                    <p class="text-muted small">
+                                        Akademi kurulu ama yardımlaşma için tasarlandı prensibiyle hareket ediyoruz
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hikayemiz -->
+                <div class="card feature-card mb-5">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-book-open fa-3x text-success"></i>
+                        </div>
+                        <h2 class="text-center text-success mb-4">Hikayemiz</h2>
+                        <p class="text-muted">
+                            Elohab Akademi, 2024 yılında Elektronik ve Haberleşme Mühendisliği öğrencilerinin 
+                            ihtiyaçlarını karşılamak amacıyla kurulmuştur. Platformumuz, öğrencilerin 
+                            karşılaştığı zorlukları gözlemleyen ve bu zorluklara çözüm üretmeye kararlı 
+                            bir grup tarafından geliştirilmiştir.
+                        </p>
+                        <p class="text-muted">
+                            Başlangıçta sadece temel ders notları ve çıkmış sorular sunan platformumuz, 
+                            zamanla mentorluk hizmetleri, proje örnekleri ve interaktif öğrenme araçları 
+                            ile zenginleştirilmiştir. Bugün, binlerce öğrenciye hizmet veren, 
+                            güvenilir ve kapsamlı bir eğitim platformu haline gelmiştir.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- İstatistikler -->
+                <div class="card bg-light border-0 mb-5">
+                    <div class="card-body">
+                        <h3 class="text-center text-success mb-4">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Platform İstatistikleri
+                        </h3>
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <div class="p-3">
+                                    <i class="fas fa-book fa-2x text-success mb-2"></i>
+                                    <h4 class="text-success">50+</h4>
+                                    <p class="text-muted mb-0">Ders</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3">
+                                    <i class="fas fa-sticky-note fa-2x text-success mb-2"></i>
+                                    <h4 class="text-success">100+</h4>
+                                    <p class="text-muted mb-0">Ders Notu</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3">
+                                    <i class="fas fa-question-circle fa-2x text-success mb-2"></i>
+                                    <h4 class="text-success">200+</h4>
+                                    <p class="text-muted mb-0">Çıkmış Soru</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3">
+                                    <i class="fas fa-users fa-2x text-success mb-2"></i>
+                                    <h4 class="text-success">3</h4>
+                                    <p class="text-muted mb-0">Mentor</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İletişim -->
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-envelope fa-3x text-success"></i>
+                        </div>
+                        <h2 class="text-success mb-4">Bizimle İletişime Geçin</h2>
+                        <p class="text-muted mb-4">
+                            Sorularınız, önerileriniz veya geri bildirimleriniz için bizimle iletişime geçebilirsiniz. 
+                            Platformumuzu geliştirmek için sizin görüşleriniz bizim için çok değerli.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="{{ url_for('grade_page', grade=1) }}" class="btn btn-success">
+                                <i class="fas fa-book me-2"></i>1. Sınıf Dersleri
+                            </a>
+                            <a href="{{ url_for('grade_page', grade=2) }}" class="btn btn-success">
+                                <i class="fas fa-book me-2"></i>2. Sınıf Dersleri
+                            </a>
+                            <a href="{{ url_for('grade_page', grade=3) }}" class="btn btn-success">
+                                <i class="fas fa-book me-2"></i>3. Sınıf Dersleri
+                            </a>
+                            <a href="{{ url_for('grade_page', grade=4) }}" class="btn btn-success">
+                                <i class="fas fa-book me-2"></i>4. Sınıf Dersleri
+                            </a>
+                            <a href="{{ url_for('mentorship') }}" class="btn btn-success">
+                                <i class="fas fa-users me-2"></i>Mentorluk Hizmeti
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.hero-section {
+    background: url('{{ url_for("static", filename="images/akademi.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    min-height: 60vh;
+    padding: 4rem 0;
+    display: flex;
+    align-items: center;
+    margin: 0 -2rem;
+    width: calc(100% + 4rem);
+}
+
+.hero-section h1 {
+    color: #ffffff !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.95);
+    letter-spacing: -0.3px;
+    margin-bottom: 1rem;
+}
+
+.hero-section p.lead {
+    color: #f8f9fa !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.hero-section .breadcrumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    margin: 0 auto;
+    width: fit-content;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.9rem;
+}
+
+.hero-section .breadcrumb-item {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+}
+
+.hero-section .breadcrumb-item a {
+    color: #FFD700 !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.hero-section .breadcrumb-item a:hover {
+    color: #FFA500 !important;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.hero-section .breadcrumb-item.active {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+/* Ana İçerik Bölümü Arka Plan */
+.main-content-section {
+    background: url('{{ url_for("static", filename="images/akademi.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    margin: 0 -2rem;
+    width: calc(100% + 4rem);
+    position: relative;
+}
+
+.main-content-section .container {
+    position: relative;
+}
+
+/* Kartların arka planını koyu ve saydam yap */
+.main-content-section .card {
+    background: rgba(26, 26, 26, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: none;
+    color: white;
+}
+
+.main-content-section .card:hover {
+    background: rgba(26, 26, 26, 0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Kart içindeki metinleri beyaz yap */
+.main-content-section .card h2,
+.main-content-section .card h3,
+.main-content-section .card h4,
+.main-content-section .card h5 {
+    color: #28a745 !important;
+}
+
+.main-content-section .card p,
+.main-content-section .card .text-muted {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.main-content-section .card .text-success {
+    color: #28a745 !important;
+}
+
+/* İstatistik kartları için özel stil */
+.main-content-section .card.bg-light {
+    background: rgba(26, 26, 26, 0.85) !important;
+    color: white;
+}
+
+.main-content-section .card.bg-light .text-muted {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+</style>
+{% endblock %} 

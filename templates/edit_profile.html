@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Profil Düzenle - Elohab Akademi{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-edit"></i> Profil Düzenle</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Kullanıcı Adı</label>
+                            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="birth_date" class="form-label">Doğum Tarihi</label>
+                                    <input type="date" class="form-control" id="birth_date" name="birth_date" value="{{ user.birth_date.strftime('%Y-%m-%d') if user.birth_date }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="school" class="form-label">Okul</label>
+                                    <input type="text" class="form-control" id="school" name="school" value="{{ user.school or '' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="department" class="form-label">Bölüm</label>
+                                    <input type="text" class="form-control" id="department" name="department" value="{{ user.department or '' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="interests" class="form-label">İlgi Alanları</label>
+                                    <input type="text" class="form-control" id="interests" name="interests" value="{{ user.interests or '' }}" placeholder="Örn: Yapay Zeka, Web, Donanım">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="profile_bg" class="form-label">Profil Arka Plan Görseli</label>
+                                    <select id="profile_bg" name="profile_bg" class="form-select">
+                                        {% set bg = user.profile_bg or 'splash_cockpit.jpg' %}
+                                        <option value="splash_cockpit.jpg" {{ 'selected' if bg == 'splash_cockpit.jpg' else '' }}>Kokpit (varsayılan)</option>
+                                    </select>
+                                    <small class="text-muted">Şimdilik varsayılan görsel mevcuttur.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <label for="current_password" class="form-label">Mevcut Şifre</label>
+                            <input type="password" class="form-control" id="current_password" name="current_password">
+                            <small class="text-muted">Şifre değiştirmek istiyorsanız doldurun</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label">Yeni Şifre</label>
+                            <input type="password" class="form-control" id="new_password" name="new_password">
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Yeni Şifre (Tekrar)</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Kaydet
+                            </button>
+                            <a href="{{ url_for('profile') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Geri
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

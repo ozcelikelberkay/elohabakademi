@@ -1,0 +1,45 @@
+# Google Drive Linkleri
+# Bu dosya tüm sınıf dersleri ve çıkmış sorular için Drive linklerini içerir
+
+## DERS NOTLARI - SINIF BAZINDA
+
+### 1. Sınıf Ders Notları
+https://drive.google.com/drive/folders/1wkaCJrncV_dAyqm-HM28T9FcS2C_PAIC?usp=sharing
+
+### 2. Sınıf Ders Notları
+https://drive.google.com/drive/folders/1UWjl8nOIb1DjDB6RH-TIVchPRONl3jy0?usp=sharing
+
+### 3. Sınıf Ders Notları
+https://drive.google.com/drive/folders/1KmAk5-PRBtimwxvR-CT9MvFNKZlVq9iX?usp=sharing
+
+### 4. Sınıf Ders Notları
+https://drive.google.com/drive/folders/1BNAVJl1G34RCerM4FwuqeLzQMTR-A96b?usp=sharing
+
+## ÇIKMIŞ SORULAR - SINIF BAZINDA
+
+### 1. Sınıf Çıkmış Sorular
+https://drive.google.com/drive/folders/1a0MhhuSHkf0ObQi5c4jTQCSup6nG69F3?usp=sharing
+
+### 2. Sınıf Çıkmış Sorular
+https://drive.google.com/drive/folders/1G2-YBLvrs8pevUBmXdF71ppRow7o45G8?usp=sharing
+
+### 3. Sınıf Çıkmış Sorular
+https://drive.google.com/drive/folders/1dNsXzQ5OtFh8_iWMpzVOhBj1r01seRjO?usp=sharing
+
+### 4. Sınıf Çıkmış Sorular
+https://drive.google.com/drive/folders/15E3YPxoDxz-Xt-B54Fyo6_SBvYtQ1oKy?usp=sharing
+
+## KULLANIM NOTLARI
+- Bu linkler sınıf bazında organize edilmiştir
+- Her sınıf için ayrı Drive klasörü bulunmaktadır
+- Linkler hem ders notları hem de çıkmış sorular için ayrılmıştır
+- Tüm linkler "Anyone with the link can view" şeklinde ayarlanmıştır
+
+## GÜNCELLEME TARİHİ
+Son Güncelleme: 2024-01-XX
+Güncelleyen: Sistem Yöneticisi
+
+## NOTLAR
+- Linkler değiştiğinde bu dosya güncellenmelidir
+- Yeni sınıflar eklendiğinde buraya eklenmelidir
+- Drive klasör yapısı değiştiğinde linkler güncellenmelidir
