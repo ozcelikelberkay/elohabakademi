@@ -128,10 +128,6 @@ def init_db_on_start():
     except Exception as e:
         logging.getLogger('error').error(f"DB init error: {e}")
 
-# Run DB init at import time for WSGI servers (idempotent)
-with app.app_context():
-    init_db_on_start()
-
 # Veritabanı modelleri
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -278,6 +274,22 @@ class CourseReview(db.Model):
     
     def __repr__(self):
         return f'<CourseReview {self.course_name} by {self.author_name}>'
+
+# One-time DB initialization after all models are defined
+_DB_INITIALIZED = False
+
+def initialize_database_once():
+    global _DB_INITIALIZED
+    if _DB_INITIALIZED:
+        return
+    try:
+        with app.app_context():
+            init_db_on_start()
+        _DB_INITIALIZED = True
+    except Exception as e:
+        logging.getLogger('error').error(f"DB init error: {e}")
+
+initialize_database_once()
 
 # Global error handlers
 @app.errorhandler(404)
