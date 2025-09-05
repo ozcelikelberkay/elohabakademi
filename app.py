@@ -8,7 +8,6 @@ from datetime import datetime
 from file_manager import FileManager
 # Payment handler removed
 from sqlalchemy import text
-import threading
 
 # Logging konfigürasyonu
 def setup_logging():
@@ -335,18 +334,13 @@ def log_request():
 # Response logging middleware
 @app.after_request
 def log_response(response):
-    """Her response'u logla ve ngrok bypass header'larını ekle"""
+    """Her response'u logla"""
     user_id = session.get('user_id', 'Anonymous')
     username = session.get('username', 'Anonymous')
     
-    # Add comprehensive ngrok bypass headers to all responses
-    response.headers['ngrok-skip-browser-warning'] = 'true'
-    response.headers['ngrok-skip-browser-warning'] = 'any'
-    response.headers['ngrok-skip-browser-warning'] = '1'
+    # Security headers
     response.headers['X-Frame-Options'] = 'ALLOWALL'
     response.headers['X-Content-Type-Options'] = 'nosniff'
-    
-    # Additional headers to prevent caching of ngrok warning
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
@@ -356,10 +350,8 @@ def log_response(response):
         if hasattr(response, 'get_data'):
             response_size = len(response.get_data())
         else:
-            # send_file response'ları için alternatif size hesaplama
             response_size = "N/A (file response)"
     except RuntimeError:
-        # Direct passthrough mode hatası için
         response_size = "N/A (direct passthrough)"
     
     loggers['app'].info(
@@ -1960,70 +1952,31 @@ def test_500_error():
         loggers['error'].error(f"Test 500 error triggered: {str(e)}")
         raise  # Re-raise to trigger 500 error handler
 
-# Ngrok configuration for live deployment
-def start_ngrok():
-    """Start ngrok tunnel with ZERO warning pages"""
+# Ensure initial data exists for WSGI (Render/Gunicorn)
+_INITIAL_DATA_DONE = False
+
+def initialize_sample_data_once():
+    global _INITIAL_DATA_DONE
+    if _INITIAL_DATA_DONE:
+        return
     try:
-        # Set ngrok auth token
-        auth_token = "31yNLbsQX6ruy0JqaIL5z06PH27_5R8k7ka566fCQocb1Wp9n"
-        ngrok.set_auth_token(auth_token)
-        print("✅ Auth token set successfully!")
-        
-        # SOLUTION 1: Try custom subdomain (requires ngrok account)
-        try:
-            # Custom subdomain - NO WARNING PAGE
-            public_url = ngrok.connect(5000, subdomain='ehm-akademi')
-            clean_url = str(public_url).split('"')[1] if '"' in str(public_url) else str(public_url)
-            print(f"\n🎯 CUSTOM DOMAIN SUCCESS: {clean_url}")
-            print(f"🚀 NO WARNING PAGE - DIRECT ACCESS!")
-        except:
-            # Fallback to standard tunnel with enhanced bypass
-            public_url = ngrok.connect(5000)
-            # Extract clean URL properly
-            url_str = str(public_url)
-            if 'https://' in url_str:
-                # Extract the actual URL from NgrokTunnel object
-                import re
-                match = re.search(r'https://[a-zA-Z0-9]+\.ngrok-free\.app', url_str)
-                if match:
-                    clean_url = match.group(0)
-                else:
-                    clean_url = url_str.split('"')[1] if '"' in url_str else url_str
-            else:
-                clean_url = url_str
-            print(f"\n🌐 Standard tunnel created: {clean_url}")
-        
-        # SOLUTION 2: Generate multiple access methods
-        base_url = clean_url.replace('NgrokTunnel: ', '').replace(' -> http://localhost:5000', '')
-        
-        # Clean the URL properly
-        if 'NgrokTunnel:' in base_url:
-            base_url = base_url.split('NgrokTunnel: ')[1].split(' ->')[0].strip()
-        
-        direct_urls = [
-            base_url,  # Clean URL - often works without warning
-            base_url + "?ngrok-skip-browser-warning=true",
-            base_url + "?ngrok-skip-browser-warning=any", 
-            base_url + "?bypass=true",
-            base_url.replace('http://', 'https://') if 'http://' in base_url else base_url
-        ]
-        
-        print(f"\n" + "="*80)
-        print(f"🎯 COPY ANY OF THESE URLS - NO WARNING PAGE:")
-        for i, url in enumerate(direct_urls, 1):
-            print(f"URL {i}: {url}")
-        print(f"="*80)
-        print(f"\n💡 TIP: Use URL 1 first - it usually has NO warning page!")
-        print(f"⚠️  Keep this terminal open to maintain connection")
-        
-        return public_url
+        with app.app_context():
+            # Create tables if not present
+            db.create_all()
+            ensure_user_columns()
+            ensure_question_columns()
+            # Populate base data if missing
+            if Course.query.count() == 0:
+                populate_courses()
+            if CourseReview.query.count() == 0:
+                populate_sample_data()
+            # Ensure admin user exists
+            create_admin_user()
+        _INITIAL_DATA_DONE = True
     except Exception as e:
-        print(f"❌ Ngrok error: {e}")
-        print("💡 Make sure you have:")
-        print("   1. Created a free account at: https://dashboard.ngrok.com/signup")
-        print("   2. Got your auth token from: https://dashboard.ngrok.com/get-started/your-authtoken")
-        print("   3. Set your auth token with: ngrok config add-authtoken YOUR_TOKEN")
-        return None
+        logging.getLogger('error').error(f"Initial data load error: {e}")
+
+initialize_sample_data_once()
 
 if __name__ == '__main__':
     with app.app_context():
@@ -2072,18 +2025,6 @@ if __name__ == '__main__':
                 print("Örnek ders yorumları başarıyla eklendi!")
             except Exception as e:
                 print(f"Örnek ders yorumları eklenirken hata: {e}")
-        else:
-            print(f"Mevcut ders yorumları kullanılıyor: {CourseReview.query.count()} yorum bulundu")
-    
-    # Start ngrok tunnel in a separate thread
-    print("🚀 Starting EHM Akademi with Ngrok...")
-    ngrok_thread = threading.Thread(target=start_ngrok)
-    ngrok_thread.daemon = True
-    ngrok_thread.start()
-    
-    # Give ngrok a moment to start
-    import time
-    time.sleep(2)
     
     # Start Flask app
     print("🏃‍♂️ Starting Flask application...")
