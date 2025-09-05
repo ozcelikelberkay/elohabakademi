@@ -120,7 +120,7 @@ file_manager = FileManager(app)
 # Payment handler removed
 
 # Ensure DB tables on first request (for gunicorn on Render)
-@app.before_first_request
+@app.before_serving
 def init_db_on_start():
     try:
         db.create_all()
