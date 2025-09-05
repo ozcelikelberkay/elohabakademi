@@ -120,7 +120,6 @@ file_manager = FileManager(app)
 # Payment handler removed
 
 # Ensure DB tables on first request (for gunicorn on Render)
-@app.before_serving
 def init_db_on_start():
     try:
         db.create_all()
@@ -128,6 +127,10 @@ def init_db_on_start():
         ensure_question_columns()
     except Exception as e:
         logging.getLogger('error').error(f"DB init error: {e}")
+
+# Run DB init at import time for WSGI servers (idempotent)
+with app.app_context():
+    init_db_on_start()
 
 # Veritabanı modelleri
 class User(db.Model):
